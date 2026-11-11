@@ -480,14 +480,19 @@ textarea {
   place-items: center;
 }
 
+/* Halo y anillo quietos. Animar blur o border-radius obliga a repintar
+   cada frame; un degradado estático da el mismo halo sin ese coste. */
 .hero-visual::before {
   content: '';
   position: absolute;
-  inset: 8%;
+  inset: 2%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(86, 193, 233, 0.28), transparent 68%);
-  filter: blur(18px);
-  animation: pulse-glow 5.5s ease-in-out infinite;
+  background: radial-gradient(
+    circle,
+    rgba(86, 193, 233, 0.32) 0%,
+    rgba(86, 193, 233, 0.12) 38%,
+    transparent 70%
+  );
 }
 
 .hero-visual::after {
@@ -495,8 +500,7 @@ textarea {
   position: absolute;
   inset: 12%;
   border: 1px solid var(--line-strong);
-  border-radius: 32% 68% 40% 60% / 45% 35% 65% 55%;
-  animation: morph 14s ease-in-out infinite;
+  border-radius: 50%;
 }
 
 .hero-visual img {
@@ -505,8 +509,7 @@ textarea {
   width: min(86%, 360px);
   height: auto;
   aspect-ratio: 446 / 392;
-  filter: drop-shadow(0 20px 50px rgba(86, 193, 233, 0.25));
-  animation: float-logo 7s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(86, 193, 233, 0.2));
 }
 
 /* Índice de servicios al pie del primer pantallazo. Solo en escritorio:
@@ -1020,40 +1023,6 @@ textarea {
   transition-delay: 90ms;
 }
 
-@keyframes float-logo {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.06);
-  }
-}
-
-@keyframes morph {
-  0%,
-  100% {
-    border-radius: 32% 68% 40% 60% / 45% 35% 65% 55%;
-    transform: rotate(0deg);
-  }
-  50% {
-    border-radius: 60% 40% 55% 45% / 55% 60% 40% 45%;
-    transform: rotate(8deg);
-  }
-}
-
 @media (max-width: 359px) {
   .hero {
     padding-top: 1.35rem;
@@ -1233,12 +1202,8 @@ textarea {
     scroll-behavior: auto;
   }
 
-  .hero-visual img,
-  .hero-visual::before,
-  .hero-visual::after,
   .btn,
   .nav-links a::after {
-    animation: none !important;
     transition: none !important;
   }
 }
