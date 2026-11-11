@@ -45,12 +45,58 @@ function useActiveSection(ids: readonly string[]) {
   return active
 }
 
+function headingIn(target: HTMLElement) {
+  if (target.matches('h1, h2, h3')) return target
+  return target.querySelector<HTMLElement>('h1, h2, h3')
+}
+
 // Si el HTML llegó sin contenido, el navegador no pudo saltar al ancla de la URL.
+// El foco va al título, que sí muestra anillo; la sección no.
 function useHashOnLoad() {
   useEffect(() => {
-    const hash = decodeURIComponent(window.location.hash.slice(1))
-    if (!hash || window.scrollY !== 0) return
-    document.getElementById(hash)?.scrollIntoView({ behavior: 'instant' })
+    const place = (allowScroll: boolean) => {
+      const hash = decodeURIComponent(window.location.hash.slice(1))
+      if (!hash) return
+      const target = document.getElementById(hash)
+      if (!target) return
+      const focusTarget = headingIn(target) ?? target
+      const active = document.activeElement
+      // Solo corregimos el foco si sigue en la región o en el documento.
+      // No se lo quitamos a quien ya pasó a un control.
+      if (
+        active === document.body ||
+        active === document.documentElement ||
+        active === target
+      ) {
+        focusTarget.focus({ preventScroll: true })
+      }
+      if (allowScroll && window.scrollY === 0) {
+        target.scrollIntoView({ behavior: 'instant' })
+      }
+    }
+
+    const onFocusIn = (event: FocusEvent) => {
+      const hash = decodeURIComponent(window.location.hash.slice(1))
+      const target = hash ? document.getElementById(hash) : null
+      if (target && event.target === target) place(false)
+    }
+
+    const onNavigate = () => place(false)
+
+    place(true)
+    document.addEventListener('focusin', onFocusIn)
+    window.addEventListener('hashchange', onNavigate)
+    window.addEventListener('popstate', onNavigate)
+    const later = window.setTimeout(() => {
+      document.removeEventListener('focusin', onFocusIn)
+      place(false)
+    }, 500)
+    return () => {
+      document.removeEventListener('focusin', onFocusIn)
+      window.removeEventListener('hashchange', onNavigate)
+      window.removeEventListener('popstate', onNavigate)
+      window.clearTimeout(later)
+    }
   }, [])
 }
 
@@ -92,6 +138,27 @@ function useReveal() {
 }
 
 const navIds = nav.map((item) => item.href.slice(1))
+
+function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
+  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+}
+
+// El ancla apunta a la sección. El foco va al título: es lo que se oye
+// y lo que queda visible bajo la cabecera. La sección entera no.
+function followAnchor(event: MouseEvent<HTMLAnchorElement>, href: string) {
+  if (!isPlainClick(event)) return
+  const target = document.getElementById(decodeURIComponent(href.slice(1)))
+  if (!target) return
+  event.preventDefault()
+  // Si el menú móvil dejó el contenido inerte, el título no puede recibir el foco.
+  const main = document.getElementById('contenido')
+  if (main) main.inert = false
+  document.body.style.overflow = ''
+  const heading = headingIn(target)
+  ;(heading ?? target).focus({ preventScroll: true })
+  target.scrollIntoView()
+  if (window.location.hash !== href) history.pushState(null, '', href)
+}
 
 function revealInMenu(item: HTMLElement, menu: HTMLElement) {
   const pad = 6
@@ -186,24 +253,22 @@ function Header() {
   }, [open])
 
   function goToSection(event: MouseEvent<HTMLAnchorElement>, href: string) {
-    const target = document.getElementById(href.slice(1))
+    if (!isPlainClick(event)) return
     setOpen(false)
-    if (!target) return
-    event.preventDefault()
     // El cierre del menú libera scroll y el inert en un efecto. Si se espera,
     // el destino sigue bloqueado y la página no se mueve.
-    const main = document.getElementById('contenido')
-    if (main) main.inert = false
-    document.body.style.overflow = ''
-    target.focus({ preventScroll: true })
-    target.scrollIntoView()
-    if (window.location.hash !== href) history.pushState(null, '', href)
+    followAnchor(event, href)
   }
 
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="site-shell inner">
-        <a className="brand-lockup" href="#top" aria-label="Solunit inicio">
+        <a
+          className="brand-lockup"
+          href="#top"
+          aria-label="Solunit inicio"
+          onClick={(event) => followAnchor(event, '#top')}
+        >
           <img
             src="/mark.svg"
             alt=""
@@ -220,13 +285,18 @@ function Header() {
               key={item.href}
               href={item.href}
               aria-current={active === item.href.slice(1) ? 'location' : undefined}
+              onClick={(event) => followAnchor(event, item.href)}
             >
               {item.label}
             </a>
           ))}
         </nav>
 
-        <a className="btn btn-primary nav-cta" href={hero.primaryCta.href}>
+        <a
+          className="btn btn-primary nav-cta"
+          href={hero.primaryCta.href}
+          onClick={(event) => followAnchor(event, hero.primaryCta.href)}
+        >
           {hero.primaryCta.label}
         </a>
 
@@ -296,13 +366,23 @@ function Hero() {
             <span className="name">{brand.name}</span>
             <span className="tagline">{brand.tagline}</span>
           </p>
-          <h1 id="hero-title">{hero.title}</h1>
+          <h1 id="hero-title" tabIndex={-1}>
+            {hero.title}
+          </h1>
           <p className="support">{hero.support}</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href={hero.primaryCta.href}>
+            <a
+              className="btn btn-primary"
+              href={hero.primaryCta.href}
+              onClick={(event) => followAnchor(event, hero.primaryCta.href)}
+            >
               {hero.primaryCta.label}
             </a>
-            <a className="btn btn-secondary" href={hero.secondaryCta.href}>
+            <a
+              className="btn btn-secondary"
+              href={hero.secondaryCta.href}
+              onClick={(event) => followAnchor(event, hero.secondaryCta.href)}
+            >
               {hero.secondaryCta.label}
             </a>
           </div>
@@ -323,7 +403,10 @@ function Hero() {
       <ul className="hero-index" aria-label="Qué hacemos">
         {services.map((service, index) => (
           <li key={service.title}>
-            <a href={`#${serviceId(index)}`}>
+            <a
+              href={`#${serviceId(index)}`}
+              onClick={(event) => followAnchor(event, `#${serviceId(index)}`)}
+            >
               <span className="num">{twoDigits(index)}</span>
               {service.title}
             </a>
@@ -363,7 +446,9 @@ function Section({
       <div className="site-shell section-grid">
         <div className="section-heading" data-reveal>
           <p className="eyebrow">{eyebrow}</p>
-          <h2 id={titleId}>{title}</h2>
+          <h2 id={titleId} tabIndex={-1}>
+            {title}
+          </h2>
           {intro ? <p className="intro">{intro}</p> : null}
         </div>
         <div className="section-body" data-reveal>
@@ -390,7 +475,7 @@ function Services() {
               {twoDigits(index)}
             </span>
             <div>
-              <h3>{service.title}</h3>
+              <h3 tabIndex={-1}>{service.title}</h3>
               <p>{service.description}</p>
             </div>
           </li>
@@ -613,7 +698,9 @@ function Contact() {
         <div className="contact-panel" data-reveal>
           <div className="contact-copy">
             <p className="eyebrow">Contacto</p>
-            <h2 id="contact-title">{contact.title}</h2>
+            <h2 id="contact-title" tabIndex={-1}>
+              {contact.title}
+            </h2>
             <p>{contact.support}</p>
             <a className="email" href={`mailto:${contact.email}`}>
               {contact.email}
@@ -731,7 +818,12 @@ function Footer() {
       <div className="site-shell">
         <div className="footer-top">
           <div className="footer-brand">
-            <a className="brand-lockup" href="#top" aria-label="Solunit inicio">
+            <a
+              className="brand-lockup"
+              href="#top"
+              aria-label="Solunit inicio"
+              onClick={(event) => followAnchor(event, '#top')}
+            >
               <img
                 src="/mark.svg"
                 alt=""
@@ -747,7 +839,7 @@ function Footer() {
 
           <nav className="footer-nav" aria-label="Secciones">
             {nav.map((item) => (
-              <a key={item.href} href={item.href}>
+              <a key={item.href} href={item.href} onClick={(event) => followAnchor(event, item.href)}>
                 {item.label}
               </a>
             ))}
@@ -773,7 +865,7 @@ export default function App() {
 
   return (
     <>
-      <a className="skip-link" href="#contenido">
+      <a className="skip-link" href="#top" onClick={(event) => followAnchor(event, '#top')}>
         Saltar al contenido
       </a>
       <Header />
