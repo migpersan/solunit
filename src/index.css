@@ -297,7 +297,7 @@ textarea {
   gap: 0.35rem;
 }
 
-.mobile-nav a {
+.mobile-nav a:not(.btn) {
   padding: 0.75rem 0.25rem;
   color: var(--muted);
 }
