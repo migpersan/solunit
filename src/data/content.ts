@@ -131,6 +131,62 @@ export const method = [
   },
 ] as const
 
+/**
+ * Ejemplos de operativa. Las filas de interfaz son ilustración,
+ * no métricas ni resultados de un cliente.
+ */
+export const lab = {
+  eyebrow: 'Ejemplo',
+  title: 'Del problema al software',
+  intro:
+    'Elige una operativa. Verás cómo el problema se convierte en un flujo, una interfaz de ejemplo y una solución.',
+  cases: [
+    {
+      id: 'reservas',
+      label: 'Reservas y cobros sueltos',
+      problem:
+        'Clientes, huecos y pagos viven en conversaciones distintas. Nadie ve el día completo.',
+      flow: ['Perfil', 'Reserva', 'Mensaje', 'Cobro'],
+      screenTitle: 'Agenda del día',
+      rows: [
+        { name: 'Consulta inicial', meta: '09:30 · confirmada' },
+        { name: 'Seguimiento', meta: '11:00 · pendiente de pago' },
+        { name: 'Cierre', meta: '16:15 · mensaje sin leer' },
+      ],
+      outcome:
+        'Una aplicación con perfiles, reservas, mensajería y cobros en el mismo sitio.',
+    },
+    {
+      id: 'tramites',
+      label: 'Trámites en sitios distintos',
+      problem:
+        'La misma gestión obliga a saltar de portal en portal para saber en qué punto está.',
+      flow: ['Trámite', 'Estado', 'Aviso', 'Archivo'],
+      screenTitle: 'Estado de gestiones',
+      rows: [
+        { name: 'Alta de actividad', meta: 'En revisión' },
+        { name: 'Modelo pendiente', meta: 'Falta un dato' },
+        { name: 'Notificación', meta: 'Recibida hoy' },
+      ],
+      outcome: 'Un solo entorno con el estado de cada gestión a la vista.',
+    },
+    {
+      id: 'campo',
+      label: 'Parte de campo en papel',
+      problem:
+        'Lo que ocurre fuera de la oficina se anota a mano y llega tarde, o no llega.',
+      flow: ['Captura', 'Validación', 'Registro', 'Seguimiento'],
+      screenTitle: 'Parte de hoy',
+      rows: [
+        { name: 'Revisión de equipo', meta: 'Foto y nota' },
+        { name: 'Incidencia', meta: 'Ubicación guardada' },
+        { name: 'Cierre de visita', meta: 'Pendiente de enviar' },
+      ],
+      outcome: 'El dato nace digital y se puede seguir desde el momento en que ocurre.',
+    },
+  ],
+} as const
+
 export const technologies = {
   intro:
     'Elegimos el stack según el problema, no según la moda. Experiencia concreta en entornos de producto real.',

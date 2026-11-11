@@ -4,6 +4,7 @@ import {
   brand,
   contact,
   hero,
+  lab,
   method,
   nav,
   projects,
@@ -469,6 +470,119 @@ function Method() {
   )
 }
 
+function caseIndexFromUrl() {
+  const id = new URLSearchParams(window.location.search).get('caso')
+  const index = lab.cases.findIndex((item) => item.id === id)
+  return index >= 0 ? index : 0
+}
+
+function Lab() {
+  const [active, setActive] = useState(0)
+  const [animate, setAnimate] = useState(false)
+  const usedPointer = useRef(false)
+  const selected = lab.cases[active] ?? lab.cases[0]
+
+  useEffect(() => {
+    const apply = () => {
+      setAnimate(false)
+      setActive(caseIndexFromUrl())
+    }
+    apply()
+    window.addEventListener('popstate', apply)
+    return () => window.removeEventListener('popstate', apply)
+  }, [])
+
+  function choose(index: number) {
+    setActive(index)
+    setAnimate(usedPointer.current)
+    usedPointer.current = false
+    const url = new URL(window.location.href)
+    url.searchParams.set('caso', lab.cases[index].id)
+    history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+  }
+
+  return (
+    <Section
+      id="laboratorio"
+      titleId="lab-title"
+      eyebrow={lab.eyebrow}
+      title={lab.title}
+      intro={lab.intro}
+      layout="stack"
+    >
+      <div className="lab">
+        <fieldset
+          className="lab-options"
+          onPointerDown={() => {
+            usedPointer.current = true
+          }}
+          onKeyDown={() => {
+            usedPointer.current = false
+          }}
+        >
+          <legend className="sr-only">Caso de ejemplo</legend>
+          {lab.cases.map((item, index) => (
+            <label className="lab-option" key={item.id}>
+              <input
+                type="radio"
+                name="lab-case"
+                value={item.id}
+                checked={index === active}
+                onChange={() => choose(index)}
+              />
+              <span>{item.label}</span>
+            </label>
+          ))}
+        </fieldset>
+
+        <div aria-live="polite">
+          <div
+            key={selected.id}
+            className={animate ? 'lab-stage is-moving' : 'lab-stage'}
+          >
+            <div>
+              <h3>Problema</h3>
+              <p>{selected.problem}</p>
+            </div>
+
+            <div>
+              <h3>Flujo</h3>
+              <ol className="lab-flow">
+                {selected.flow.map((step, index) => (
+                  <li key={step}>
+                    <span className="num" aria-hidden="true">
+                      {twoDigits(index)}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="lab-screen" aria-hidden="true">
+              <p className="lab-screen-kicker">Interfaz de ejemplo</p>
+              <p className="lab-screen-title">{selected.screenTitle}</p>
+              <ul>
+                {selected.rows.map((row) => (
+                  <li key={row.name}>
+                    <span>{row.name}</span>
+                    <span>{row.meta}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="lab-outcome">
+              <h3>Solución</h3>
+              <p>{selected.outcome}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
 function Technologies() {
   return (
     <Section
@@ -553,6 +667,7 @@ function Contact() {
                 name="email"
                 type="email"
                 autoComplete="email"
+                spellCheck={false}
                 required
               />
             </div>
@@ -643,6 +758,7 @@ export default function App() {
         <Why />
         <Projects />
         <Method />
+        <Lab />
         <Technologies />
         <Contact />
       </main>
