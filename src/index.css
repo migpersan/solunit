@@ -436,7 +436,8 @@ textarea {
   display: grid;
   align-items: center;
   padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(3.5rem, 8vw, 5rem);
-  overflow: hidden;
+  /* Sin recorte: en 320px los CTA ocupan todo el ancho y el anillo
+     de foco quedaba fuera de la caja. El halo del símbolo no desborda. */
 }
 
 .hero-grid {
@@ -1245,6 +1246,66 @@ textarea {
   .footer-nav {
     grid-column: auto;
     grid-row: auto;
+  }
+}
+
+/* En poca altura el hero sigue en una columna y los dos CTA
+   quedan bajo el pliegue. Se aprieta el ritmo; el texto no cambia.
+   568px de alto queda fuera: ahí el ajuste de 320px ya los enseña. */
+@media (max-height: 520px) {
+  .hero {
+    min-height: 0;
+    align-items: start;
+    padding-top: 0.75rem;
+    padding-bottom: 1.15rem;
+  }
+
+  .hero-grid {
+    gap: 1.15rem;
+  }
+
+  .hero-brand {
+    margin-bottom: 0.45rem;
+  }
+
+  .hero-brand .name {
+    font-size: clamp(1.7rem, 6vw, 2.4rem);
+  }
+
+  .hero-brand .tagline {
+    margin-top: 0.28rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.28rem, 3.2vw, 1.7rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .hero .support {
+    margin-bottom: 0.7rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+/* 320px de alto: con el ritmo anterior los CTA aún asoman.
+   Se recortan márgenes; el botón sigue en 48px. */
+@media (max-height: 340px) {
+  .hero {
+    padding-top: 0.35rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .hero-brand {
+    margin-bottom: 0.15rem;
+  }
+
+  .hero h1 {
+    margin-bottom: 0.15rem;
+  }
+
+  .hero .support {
+    margin-bottom: 0.35rem;
   }
 }
 
