@@ -68,14 +68,15 @@ export const method = [
 ] as const
 
 /**
- * Ejemplos de operativa. Las filas de interfaz son ilustración,
- * no métricas ni resultados de un cliente.
+ * Ejemplos de operativa. Las filas son ilustración, no métricas
+ * ni resultados de un cliente. La fila abierta es el paso en curso
+ * (trailAt): lo anterior del recorrido está hecho y lo posterior, pendiente.
  */
 export const lab = {
   eyebrow: 'Ejemplo',
   title: 'Del problema al software',
   intro:
-    'Elige una operativa. La pantalla es un ejemplo: el trabajo en curso y el paso que falta.',
+    'Elige una operativa. La pantalla es un ejemplo: qué está hecho, qué sigue en curso y qué falta.',
   cases: [
     {
       id: 'reservas',
@@ -90,8 +91,8 @@ export const lab = {
         { primary: 'Cierre', secondary: '16:15', state: 'Mensaje sin leer' },
       ],
       open: 1,
-      trail: ['Perfil', 'Reserva', 'Mensaje', 'Cobro'],
-      trailAt: 3,
+      trail: ['Perfil', 'Reserva', 'Cobro', 'Mensaje'],
+      trailAt: 2,
       outcome: 'Reservas, mensajes y cobros quedan en el mismo producto.',
     },
     {
@@ -102,9 +103,9 @@ export const lab = {
       app: 'Gestiones',
       when: 'En curso',
       rows: [
-        { primary: 'Alta de actividad', secondary: 'Este mes', state: 'En revisión' },
+        { primary: 'Alta de actividad', secondary: 'Este mes', state: 'Presentada' },
         { primary: 'Modelo trimestral', secondary: 'Trimestre', state: 'Falta un dato' },
-        { primary: 'Notificación', secondary: 'Hoy', state: 'Recibida' },
+        { primary: 'Notificación', secondary: 'Hoy', state: 'Sin leer' },
       ],
       open: 1,
       trail: ['Trámite', 'Estado', 'Aviso', 'Archivo'],
@@ -119,8 +120,8 @@ export const lab = {
       app: 'Parte',
       when: 'Visita 14',
       rows: [
-        { primary: 'Revisión de equipo', secondary: 'Foto y nota', state: 'Registrada' },
-        { primary: 'Incidencia', secondary: 'Ubicación', state: 'Guardada' },
+        { primary: 'Revisión de equipo', secondary: 'Foto y nota', state: 'Validada' },
+        { primary: 'Incidencia', secondary: 'Ubicación', state: 'En registro' },
         { primary: 'Cierre de visita', secondary: 'Sin enviar', state: 'Pendiente' },
       ],
       open: 1,
