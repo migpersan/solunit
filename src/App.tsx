@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import type { FormEvent, ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { FormEvent, MouseEvent, ReactNode } from 'react'
 import {
   brand,
   contact,
@@ -106,20 +106,51 @@ function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
+    const locked = [
+      document.querySelector('.skip-link'),
+      document.querySelector('.site-header .brand-lockup'),
+      document.querySelector('.nav-links'),
+      document.querySelector('.nav-cta'),
+      document.getElementById('contenido'),
+      document.querySelector('.site-footer'),
+    ].filter((node): node is HTMLElement => node instanceof HTMLElement)
+
+    for (const node of locked) node.inert = open
     return () => {
       document.body.style.overflow = ''
+      for (const node of locked) node.inert = false
     }
   }, [open])
 
   useEffect(() => {
     if (!open) return
 
+    const nav = document.getElementById('mobile-nav')
+    const items = () => {
+      const links = nav ? [...nav.querySelectorAll<HTMLElement>('a[href]')] : []
+      return toggleRef.current ? [toggleRef.current, ...links] : links
+    }
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      setOpen(false)
-      toggleRef.current?.focus()
+      if (event.key === 'Escape') {
+        setOpen(false)
+        toggleRef.current?.focus()
+        return
+      }
+      if (event.key !== 'Tab') return
+      const focusable = items()
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) return
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
 
     const onResize = () => {
@@ -128,11 +159,29 @@ function Header() {
 
     window.addEventListener('keydown', onKey)
     window.addEventListener('resize', onResize)
+    const current = nav?.querySelector<HTMLElement>('a[aria-current="location"]')
+    const first = nav?.querySelector<HTMLElement>('a[href]')
+    ;(current ?? first)?.focus()
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('resize', onResize)
     }
   }, [open])
+
+  function goToSection(event: MouseEvent<HTMLAnchorElement>, href: string) {
+    const target = document.getElementById(href.slice(1))
+    setOpen(false)
+    if (!target) return
+    event.preventDefault()
+    // El cierre del menú libera scroll y el inert en un efecto. Si se espera,
+    // el destino sigue bloqueado y la página no se mueve.
+    const main = document.getElementById('contenido')
+    if (main) main.inert = false
+    document.body.style.overflow = ''
+    target.focus({ preventScroll: true })
+    target.scrollIntoView()
+    if (window.location.hash !== href) history.pushState(null, '', href)
+  }
 
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
@@ -177,17 +226,41 @@ function Header() {
         </button>
       </div>
 
-      <div id="mobile-nav" className={`mobile-nav${open ? ' is-open' : ''}`}>
+      {open ? (
+        <button
+          type="button"
+          className="nav-scrim"
+          aria-label="Cerrar menú"
+          tabIndex={-1}
+          onClick={() => {
+            setOpen(false)
+            toggleRef.current?.focus()
+          }}
+        />
+      ) : null}
+
+      <div
+        id="mobile-nav"
+        className={`mobile-nav${open ? ' is-open' : ''}`}
+        role={open ? 'dialog' : undefined}
+        aria-modal={open ? true : undefined}
+        aria-label={open ? 'Menú' : undefined}
+      >
         <div className="site-shell">
           {nav.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <a
+              key={item.href}
+              href={item.href}
+              aria-current={active === item.href.slice(1) ? 'location' : undefined}
+              onClick={(event) => goToSection(event, item.href)}
+            >
               {item.label}
             </a>
           ))}
           <a
             className="btn btn-primary"
             href={hero.primaryCta.href}
-            onClick={() => setOpen(false)}
+            onClick={(event) => goToSection(event, hero.primaryCta.href)}
           >
             {hero.primaryCta.label}
           </a>
@@ -199,7 +272,7 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="hero site-shell" id="top" aria-labelledby="hero-title">
+    <section className="hero site-shell" id="top" aria-labelledby="hero-title" tabIndex={-1}>
       <div className="hero-grid">
         <div className="hero-copy">
           <p className="hero-brand">
@@ -264,7 +337,12 @@ function Section({
   children,
 }: SectionProps) {
   return (
-    <section className={`section section-${layout}`} id={id} aria-labelledby={titleId}>
+    <section
+      className={`section section-${layout}`}
+      id={id}
+      aria-labelledby={titleId}
+      tabIndex={-1}
+    >
       <div className="site-shell section-grid">
         <div className="section-heading" data-reveal>
           <p className="eyebrow">{eyebrow}</p>
@@ -438,7 +516,12 @@ function Contact() {
   }
 
   return (
-    <section className="section section-contact" id="contacto" aria-labelledby="contact-title">
+    <section
+      className="section section-contact"
+      id="contacto"
+      aria-labelledby="contact-title"
+      tabIndex={-1}
+    >
       <div className="site-shell">
         <div className="contact-panel" data-reveal>
           <div className="contact-copy">
@@ -554,7 +637,7 @@ export default function App() {
         Saltar al contenido
       </a>
       <Header />
-      <main id="contenido">
+      <main id="contenido" tabIndex={-1}>
         <Hero />
         <Services />
         <Why />
