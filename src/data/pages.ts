@@ -1,10 +1,11 @@
+import { hero } from './content'
 import { owner } from './legal'
 
 export const pageMeta = {
   home: {
     title: 'Solunit — Soluciones Únicas Tecnológicas',
-    description:
-      'Solunit — Soluciones Únicas Tecnológicas. Tecnología a medida para empresas que quieren llegar más lejos.',
+    // El título ya lleva la marca. La ficha dice el oficio, con el apoyo cerrado del hero.
+    description: hero.support,
     canonical: owner.site,
   },
   'aviso-legal': {

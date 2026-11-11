@@ -126,6 +126,20 @@ try {
       if (!html.includes('id="hero-title"') || !html.includes(heroTitle)) {
         throw new Error('El prerender no incluye el titular del hero.')
       }
+      // La descripción de búsqueda, Open Graph y Twitter tienen que decir el oficio.
+      // Si el prerender las deja en el título, la tarjeta social repite la marca y no el trabajo.
+      const descriptionMarks = [
+        `name="description" content="${meta.description}"`,
+        `property="og:description" content="${meta.description}"`,
+        `name="twitter:description" content="${meta.description}"`,
+      ]
+      const flat = html.replace(/\s+/g, ' ')
+      if (descriptionMarks.some((mark) => !flat.includes(mark))) {
+        throw new Error('La descripción de la home no llega igual a la ficha, a Open Graph y a Twitter.')
+      }
+      if (!html.includes(`"description": ${JSON.stringify(meta.description)}`)) {
+        throw new Error('La descripción del JSON-LD de la home no coincide con la ficha.')
+      }
       if (!html.includes(owner.email) || !html.includes('/aviso-legal') || !html.includes('/privacidad')) {
         throw new Error('El prerender de la home no incluye el contacto ni las páginas legales.')
       }
