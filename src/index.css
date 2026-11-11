@@ -203,7 +203,7 @@ textarea {
   color: var(--text);
 }
 
-.nav-cta {
+a.nav-cta {
   display: none;
 }
 
@@ -681,7 +681,7 @@ textarea {
 
 @media (min-width: 760px) {
   .nav-links,
-  .nav-cta {
+  a.nav-cta {
     display: inline-flex;
   }
 
