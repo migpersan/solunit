@@ -160,6 +160,8 @@ h1,
 h2,
 h3 {
   text-wrap: balance;
+  /* Si el foco mueve el título, que no quede debajo de la cabecera fija. */
+  scroll-margin-top: calc(var(--header) + 0.75rem);
 }
 
 p {
@@ -1251,8 +1253,11 @@ textarea {
     scroll-behavior: auto;
   }
 
-  .btn,
-  .nav-links a::after {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
     transition: none !important;
+    animation: none !important;
   }
 }
