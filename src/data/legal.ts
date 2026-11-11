@@ -12,6 +12,7 @@ export const owner = {
   updatedLabel: '11 de noviembre de 2026',
 } as const
 
+/** Datos públicos de la organización. El documento de identidad queda en el aviso legal. */
 export function organizationJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -30,7 +31,6 @@ export function organizationJsonLd() {
     founder: {
       '@type': 'Person',
       name: owner.name,
-      taxID: owner.idDocument,
     },
   }
 }
