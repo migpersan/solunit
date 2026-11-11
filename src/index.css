@@ -1164,11 +1164,122 @@ textarea {
   padding: 0.35rem 0;
 }
 
-.footer-legal {
-  margin: 0;
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  justify-content: space-between;
+  align-items: baseline;
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
   font-size: 0.85rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.footer-legal-nav a {
+  padding: 0.4rem 0;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+.footer-legal-nav a:hover,
+.footer-legal-nav a[aria-current='page'] {
+  color: var(--text);
+}
+
+.form-note a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+/* Páginas legales */
+
+.legal-page {
+  padding: clamp(2.5rem, 6vw, 4.25rem) 0 clamp(4rem, 8vw, 6rem);
+}
+
+.legal-wrap {
+  max-width: 42rem;
+}
+
+.legal-page h1 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.legal-lead {
+  margin: 0;
+  max-width: 38rem;
+  font-size: 1.08rem;
+}
+
+.legal-facts {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+}
+
+.legal-facts div {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.legal-facts dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.legal-facts dd {
+  margin: 0;
+}
+
+.legal-section {
+  margin-top: 2.25rem;
+}
+
+.legal-section h2 {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.legal-section p {
+  margin: 0.7rem 0 0;
+}
+
+.legal-page a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+.legal-updated {
+  margin: 2.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 /* Aparición al hacer scroll. Solo se activa con JavaScript: sin él, todo es visible. */

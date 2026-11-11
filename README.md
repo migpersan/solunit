@@ -29,5 +29,5 @@ Si el dominio sirve un build antiguo (Google Fonts, `#root` vacío, sin `data-pr
 ## Pendiente (revisión humana)
 
 - Casos de proyecto reales y métricas verificables
-- Verificar que `hola@solunit.es` recibe correo
+- El contacto público es `info@kedai.es` hasta que `hola@solunit.es` tenga buzón
 - Formulario de contacto con envío real (sin mailto)

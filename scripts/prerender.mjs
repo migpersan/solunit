@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
@@ -30,36 +30,121 @@ const vite = await createServer({
   logLevel: 'error',
 })
 
+function replaceOnce(html, pattern, replacement, label) {
+  if (!pattern.test(html)) throw new Error(`Prerender: no se pudo actualizar ${label}`)
+  pattern.lastIndex = 0
+  return html.replace(pattern, replacement)
+}
+
+function applyHead(html, meta, jsonLd) {
+  let next = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${meta.title}</title>`, 'title')
+  next = replaceOnce(
+    next,
+    /(<meta\s+name="description"\s+content=")[^"]*(")/,
+    `$1${meta.description}$2`,
+    'description',
+  )
+  next = replaceOnce(
+    next,
+    /(<link rel="canonical" href=")[^"]*(")/,
+    `$1${meta.canonical}$2`,
+    'canonical',
+  )
+  next = replaceOnce(
+    next,
+    /(<meta property="og:title" content=")[^"]*(")/,
+    `$1${meta.title}$2`,
+    'og:title',
+  )
+  next = replaceOnce(
+    next,
+    /(<meta\s+property="og:description"\s+content=")[^"]*(")/,
+    `$1${meta.description}$2`,
+    'og:description',
+  )
+  next = replaceOnce(
+    next,
+    /(<meta property="og:url" content=")[^"]*(")/,
+    `$1${meta.canonical}$2`,
+    'og:url',
+  )
+  next = replaceOnce(
+    next,
+    /(<meta name="twitter:title" content=")[^"]*(")/,
+    `$1${meta.title}$2`,
+    'twitter:title',
+  )
+  next = replaceOnce(
+    next,
+    /(<meta\s+name="twitter:description"\s+content=")[^"]*(")/,
+    `$1${meta.description}$2`,
+    'twitter:description',
+  )
+  const json = JSON.stringify(jsonLd, null, 2)
+    .split('\n')
+    .map((line, index) => (index === 0 ? line : `      ${line}`))
+    .join('\n')
+  next = replaceOnce(
+    next,
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+    `<script type="application/ld+json">\n      ${json}\n    </script>`,
+    'json-ld',
+  )
+  return next
+}
+
+function pageHtml(appHtml) {
+  return appHtml.replace(/^(?:<link rel="preload" as="image"[^>]*>)+/, '')
+}
+
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-  // renderToString antepone <link rel="preload"> de las <img>.
-  // En el cliente no son hijos de #root (el <head> ya precarga el símbolo),
-  // así que se retiran para que la hidratación coincida.
-  const appHtml = render().replace(
-    /^(?:<link rel="preload" as="image"[^>]*>)+/,
-    '',
-  )
+  const { pageMeta } = await vite.ssrLoadModule('/src/data/pages.ts')
+  const { organizationJsonLd, owner } = await vite.ssrLoadModule('/src/data/legal.ts')
+  const jsonLd = organizationJsonLd()
 
-  if (!appHtml.startsWith('<a class="skip-link"') || appHtml.includes('<script')) {
-    throw new Error(
-      `El HTML prerenderizado no empieza por el enlace de salto. Inicio: ${appHtml.slice(0, 240)}`,
-    )
+  const outputs = [
+    { id: 'home', file: indexFile },
+    { id: 'aviso-legal', file: path.join(path.dirname(indexFile), 'aviso-legal', 'index.html') },
+    { id: 'privacidad', file: path.join(path.dirname(indexFile), 'privacidad', 'index.html') },
+  ]
+
+  for (const output of outputs) {
+    const meta = pageMeta[output.id]
+    const appHtml = pageHtml(render(output.id))
+
+    if (!appHtml.startsWith('<a class="skip-link"') || appHtml.includes('<script')) {
+      throw new Error(
+        `El HTML de ${output.id} no empieza por el enlace de salto. Inicio: ${appHtml.slice(0, 240)}`,
+      )
+    }
+
+    let html = applyHead(template, meta, jsonLd)
+    html = html.replace(rootPattern, () => `<div id="root" ${marker}>${appHtml}</div>`)
+
+    if (output.id === 'home') {
+      if (!html.includes('id="hero-title"') || !html.includes(heroTitle)) {
+        throw new Error('El prerender no incluye el titular del hero.')
+      }
+      if (!html.includes(owner.email) || !html.includes('/aviso-legal') || !html.includes('/privacidad')) {
+        throw new Error('El prerender de la home no incluye el contacto ni las páginas legales.')
+      }
+    } else {
+      if (html.includes('id="hero-title"')) {
+        throw new Error(`La página ${output.id} ha prerenderizado la home.`)
+      }
+      if (!html.includes(owner.name) || !html.includes(owner.idDocument) || !html.includes(owner.address)) {
+        throw new Error(`La página ${output.id} no incluye la identidad del titular.`)
+      }
+      if (!html.includes(`<title>${meta.title}</title>`) || !html.includes(meta.canonical)) {
+        throw new Error(`La cabecera de ${output.id} no coincide con su ficha.`)
+      }
+    }
+
+    await mkdir(path.dirname(output.file), { recursive: true })
+    await writeFile(output.file, html)
+    console.log(`Prerender: ${output.file} (${html.length} bytes)`)
   }
-
-  const html = template.replace(
-    rootPattern,
-    () => `<div id="root" ${marker}>${appHtml}</div>`,
-  )
-
-  if (!html.includes('id="hero-title"') || !html.includes(heroTitle)) {
-    throw new Error('El prerender no incluye el titular del hero.')
-  }
-  if (!html.includes('hola@solunit.es')) {
-    throw new Error('El prerender no incluye el email de contacto.')
-  }
-
-  await writeFile(indexFile, html)
-  console.log(`Prerender: ${indexFile} (${html.length} bytes)`)
 } finally {
   await vite.close()
 }
