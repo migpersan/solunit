@@ -659,6 +659,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--bg-panel);
+  container: project / inline-size;
 }
 
 .project .sector {
@@ -1078,15 +1079,19 @@ textarea {
     border-left: 1px solid var(--line);
   }
 
-  .project dl > div,
   .tech-group {
-    grid-template-columns: 9.5rem minmax(0, 1fr);
+    grid-template-columns: 11.5rem minmax(0, 1fr);
     gap: 1rem;
     align-items: baseline;
   }
+}
 
-  .tech-group {
-    grid-template-columns: 11.5rem minmax(0, 1fr);
+/* La ficha pasa a dos columnas según el ancho de la tarjeta, no de la pantalla. */
+@container project (min-width: 26rem) {
+  .project dl > div {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
   }
 }
 
