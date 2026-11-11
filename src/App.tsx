@@ -34,7 +34,13 @@ function Header() {
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="site-shell inner">
         <a className="brand-lockup" href="#top" aria-label="Solunit inicio">
-          <img src="/logo.png" alt="" width={42} height={42} />
+          <img
+            src="/logo.png"
+            alt=""
+            width={42}
+            height={42}
+            decoding="async"
+          />
           <strong>{brand.name}</strong>
         </a>
 
@@ -104,7 +110,14 @@ function Hero() {
         </div>
 
         <div className="hero-visual" aria-hidden="true">
-          <img src="/logo.png" alt="" width={280} height={280} />
+          <img
+            src="/logo.png"
+            alt=""
+            width={280}
+            height={280}
+            decoding="async"
+            fetchPriority="high"
+          />
         </div>
       </div>
     </section>
@@ -349,8 +362,11 @@ function Footer() {
 export default function App() {
   return (
     <>
+      <a className="skip-link" href="#contenido">
+        Saltar al contenido
+      </a>
       <Header />
-      <main>
+      <main id="contenido">
         <Hero />
         <Services />
         <Why />
