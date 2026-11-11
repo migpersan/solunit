@@ -38,15 +38,16 @@ Instaladas en `.agents/skills/` (lock en `skills-lock.json`):
 
 1. **`frontend-design`** (Anthropic) — léela **antes** de rediseñar o tocar tipografía, color, layout o secciones nuevas. Planifica dirección visual y evita look genérico de IA. No diluye el hero cerrado ni el norte de marca.
 2. **`web-design-guidelines`** (Vercel) — úsala **después** del cambio visual para revisar accesibilidad, foco e interacción (`file:line`).
+3. **`emil-design-eng`** (Emil Kowalski) — léela cuando el trabajo sea motion concreto: easing, duración, hovers y microinteracciones. No sustituye a `frontend-design` para la dirección visual de la página.
 
-No mezclar otras skills de “gusto” (Taste, etc.) con `frontend-design` en el mismo ciclo. Emil Kowalski solo si el trabajo es motion concreto.
+No mezclar otras skills de “gusto” (Taste, etc.) con `frontend-design` en el mismo ciclo.
 
 ## Archivos clave
 
 - Copy: `src/data/content.ts`
 - Estilos: `src/index.css`
 - Página: `src/App.tsx`
-- Skills: `.agents/skills/frontend-design`, `.agents/skills/web-design-guidelines`
+- Skills: `.agents/skills/frontend-design`, `.agents/skills/web-design-guidelines`, `.agents/skills/emil-design-eng`
 
 ## Criterio de merge
 
