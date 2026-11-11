@@ -32,11 +32,21 @@ Prioridad baja / evitar:
 - Prometer plazos milagro (“listo en semanas”) como regla general en el hero.
 - Limitar públicamente el ICP a “10–100 empleados” en el copy de marca.
 
+## Skills de diseño (obligatorias en cambios visuales)
+
+Instaladas en `.agents/skills/` (lock en `skills-lock.json`):
+
+1. **`frontend-design`** (Anthropic) — léela **antes** de rediseñar o tocar tipografía, color, layout o secciones nuevas. Planifica dirección visual y evita look genérico de IA. No diluye el hero cerrado ni el norte de marca.
+2. **`web-design-guidelines`** (Vercel) — úsala **después** del cambio visual para revisar accesibilidad, foco e interacción (`file:line`).
+
+No mezclar otras skills de “gusto” (Taste, etc.) con `frontend-design` en el mismo ciclo. Emil Kowalski solo si el trabajo es motion concreto.
+
 ## Archivos clave
 
 - Copy: `src/data/content.ts`
 - Estilos: `src/index.css`
 - Página: `src/App.tsx`
+- Skills: `.agents/skills/frontend-design`, `.agents/skills/web-design-guidelines`
 
 ## Criterio de merge
 
