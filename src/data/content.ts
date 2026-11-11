@@ -135,7 +135,7 @@ export const contact = {
   title: 'Hablemos de tu proyecto',
   support:
     'Una conversación para entender el reto y ver si encajamos. Sin compromiso y con claridad desde el primer momento.',
-  email: 'hola@solunit.es',
+  email: 'info@kedai.es',
   formHint: 'Al enviar se abre tu aplicación de correo con el mensaje ya redactado.',
   formSent: 'Mensaje preparado en tu aplicación de correo. Si no se ha abierto, escríbenos a',
   formErrors: {

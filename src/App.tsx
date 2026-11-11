@@ -9,6 +9,9 @@ import {
   nav,
   services,
 } from './data/content'
+import { owner } from './data/legal'
+import { pageMeta, type PageId } from './data/pages'
+import LegalPage from './LegalPage'
 
 const serviceId = (index: number) => `servicio-${index + 1}`
 const twoDigits = (index: number) => String(index + 1).padStart(2, '0')
@@ -188,7 +191,7 @@ function revealInMenu(item: HTMLElement, menu: HTMLElement) {
   }
 }
 
-function Header() {
+function Header({ home }: { home: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -269,8 +272,10 @@ function Header() {
     }
   }, [open])
 
+  const sectionHref = (hash: string) => (home ? hash : `/${hash}`)
+
   function goToSection(event: MouseEvent<HTMLAnchorElement>, href: string) {
-    if (!isPlainClick(event)) return
+    if (!isPlainClick(event) || !home) return
     setOpen(false)
     // El cierre del menú libera scroll y el inert en un efecto. Si se espera,
     // el destino sigue bloqueado y la página no se mueve.
@@ -282,9 +287,9 @@ function Header() {
       <div className="site-shell inner">
         <a
           className="brand-lockup"
-          href="#top"
+          href={home ? '#top' : '/'}
           aria-label="Solunit inicio"
-          onClick={(event) => followAnchor(event, '#top')}
+          onClick={home ? (event) => followAnchor(event, '#top') : undefined}
         >
           <img
             src="/mark.svg"
@@ -300,9 +305,9 @@ function Header() {
           {nav.map((item) => (
             <a
               key={item.href}
-              href={item.href}
-              aria-current={active === item.href.slice(1) ? 'location' : undefined}
-              onClick={(event) => followAnchor(event, item.href)}
+              href={sectionHref(item.href)}
+              aria-current={home && active === item.href.slice(1) ? 'location' : undefined}
+              onClick={(event) => goToSection(event, item.href)}
             >
               {item.label}
             </a>
@@ -311,8 +316,8 @@ function Header() {
 
         <a
           className="btn btn-primary nav-cta"
-          href={hero.primaryCta.href}
-          onClick={(event) => followAnchor(event, hero.primaryCta.href)}
+          href={sectionHref(hero.primaryCta.href)}
+          onClick={(event) => goToSection(event, hero.primaryCta.href)}
         >
           {hero.primaryCta.label}
         </a>
@@ -354,8 +359,8 @@ function Header() {
           {nav.map((item) => (
             <a
               key={item.href}
-              href={item.href}
-              aria-current={active === item.href.slice(1) ? 'location' : undefined}
+              href={sectionHref(item.href)}
+              aria-current={home && active === item.href.slice(1) ? 'location' : undefined}
               onClick={(event) => goToSection(event, item.href)}
             >
               {item.label}
@@ -363,7 +368,7 @@ function Header() {
           ))}
           <a
             className="btn btn-primary"
-            href={hero.primaryCta.href}
+            href={sectionHref(hero.primaryCta.href)}
             onClick={(event) => goToSection(event, hero.primaryCta.href)}
           >
             {hero.primaryCta.label}
@@ -867,12 +872,16 @@ function Contact() {
             <button
               className="btn btn-primary"
               type="submit"
-              aria-describedby="contact-form-hint"
+              aria-describedby="contact-form-hint contact-form-privacy"
             >
               Enviar mensaje
             </button>
             <p className="form-note" id="contact-form-hint">
               {contact.formHint}
+            </p>
+            <p className="form-note" id="contact-form-privacy">
+              Responsable: {owner.name}. El mensaje sirve para responderte y no se guarda en esta
+              web. <a href="/privacidad">Política de privacidad</a>.
             </p>
             <p className="form-note form-status" id="contact-form-status" role="status">
               {sent ? (
@@ -891,7 +900,10 @@ function Contact() {
 
 const copyrightYear = new Date().getFullYear()
 
-function Footer() {
+function Footer({ page }: { page: PageId }) {
+  const home = page === 'home'
+  const sectionHref = (hash: string) => (home ? hash : `/${hash}`)
+
   return (
     <footer className="site-footer">
       <div className="site-shell">
@@ -899,9 +911,9 @@ function Footer() {
           <div className="footer-brand">
             <a
               className="brand-lockup"
-              href="#top"
+              href={home ? '#top' : '/'}
               aria-label="Solunit inicio"
-              onClick={(event) => followAnchor(event, '#top')}
+              onClick={home ? (event) => followAnchor(event, '#top') : undefined}
             >
               <img
                 src="/mark.svg"
@@ -918,7 +930,11 @@ function Footer() {
 
           <nav className="footer-nav" aria-label="Secciones">
             {nav.map((item) => (
-              <a key={item.href} href={item.href} onClick={(event) => followAnchor(event, item.href)}>
+              <a
+                key={item.href}
+                href={sectionHref(item.href)}
+                onClick={home ? (event) => followAnchor(event, item.href) : undefined}
+              >
                 {item.label}
               </a>
             ))}
@@ -929,33 +945,63 @@ function Footer() {
           </a>
         </div>
 
-        <p className="footer-legal">
-          © <span suppressHydrationWarning>{copyrightYear}</span> Solunit. Todos los
-          derechos reservados.
-        </p>
+        <div className="footer-bottom">
+          <p>
+            © <span suppressHydrationWarning>{copyrightYear}</span> {owner.name}. {brand.name}.
+          </p>
+          <nav className="footer-legal-nav" aria-label="Información legal">
+            <a href="/aviso-legal" aria-current={page === 'aviso-legal' ? 'page' : undefined}>
+              Aviso legal
+            </a>
+            <a href="/privacidad" aria-current={page === 'privacidad' ? 'page' : undefined}>
+              Privacidad
+            </a>
+          </nav>
+        </div>
       </div>
     </footer>
   )
 }
 
-export default function App() {
+function usePageMeta(page: PageId) {
+  useEffect(() => {
+    const meta = pageMeta[page]
+    document.title = meta.title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description)
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', meta.canonical)
+  }, [page])
+}
+
+export default function App({ page = 'home' }: { page?: PageId }) {
+  const home = page === 'home'
+  usePageMeta(page)
   useHashOnLoad()
   useReveal()
 
   return (
     <>
-      <a className="skip-link" href="#top" onClick={(event) => followAnchor(event, '#top')}>
+      <a
+        className="skip-link"
+        href={home ? '#top' : '#contenido'}
+        onClick={(event) => followAnchor(event, home ? '#top' : '#contenido')}
+      >
         Saltar al contenido
       </a>
-      <Header />
+      <Header home={home} />
       <main id="contenido" tabIndex={-1}>
-        <Hero />
-        <Services />
-        <Method />
-        <Lab />
-        <Contact />
+        {page === 'home' ? (
+          <>
+            <Hero />
+            <Services />
+            <Method />
+            <Lab />
+            <Contact />
+          </>
+        ) : (
+          <LegalPage page={page} />
+        )}
       </main>
-      <Footer />
+      <Footer page={page} />
     </>
   )
 }

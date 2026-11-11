@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App.tsx'
+import { pageFromPath } from './data/pages.ts'
 import './index.css'
 
 const root = document.getElementById('root')
@@ -11,7 +12,7 @@ if (!root) {
 
 const app = (
   <StrictMode>
-    <App />
+    <App page={pageFromPath(window.location.pathname)} />
   </StrictMode>
 )
 
