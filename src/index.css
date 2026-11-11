@@ -1,3 +1,68 @@
+/* Subconjuntos latinos variables, en el propio origen (SIL OFL).
+   Manrope © 2018 The Manrope Project Authors. Licencia: /fonts/OFL-Manrope.txt
+   Syne © 2017 The Syne Project Authors. Licencia: /fonts/OFL-Syne.txt */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope-latin-v23.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/syne-latin-v24.woff2') format('woff2');
+}
+
+/* Métricas ajustadas a Arial (y equivalentes: Arimo, Liberation Sans)
+   para que el texto no salte al llegar la fuente real. */
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial'), local('Arimo'), local('Liberation Sans');
+  font-style: normal;
+  font-weight: 200 500;
+  size-adjust: 103.76%;
+  ascent-override: 102.74%;
+  descent-override: 28.91%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial Bold'), local('Arimo Bold'), local('Liberation Sans Bold');
+  font-style: normal;
+  font-weight: 600 800;
+  size-adjust: 100.93%;
+  ascent-override: 105.62%;
+  descent-override: 29.72%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial Bold'), local('Arimo Bold'), local('Liberation Sans Bold');
+  font-style: normal;
+  font-weight: 700;
+  size-adjust: 115.22%;
+  ascent-override: 80.28%;
+  descent-override: 23.87%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial Bold'), local('Arimo Bold'), local('Liberation Sans Bold');
+  font-style: normal;
+  font-weight: 800;
+  size-adjust: 166.54%;
+  ascent-override: 55.54%;
+  descent-override: 16.51%;
+  line-gap-override: 0%;
+}
+
 :root {
   color-scheme: dark;
 
@@ -13,8 +78,8 @@
   --cyan-soft: rgba(86, 193, 233, 0.12);
   --white: #ffffff;
 
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'Manrope', sans-serif;
+  --font-display: 'Syne', 'Syne Fallback', sans-serif;
+  --font-body: 'Manrope', 'Manrope Fallback', sans-serif;
 
   --radius: 18px;
   --max: 1120px;
@@ -45,6 +110,7 @@ body {
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-synthesis-weight: none;
 }
 
 body::before {
