@@ -1,5 +1,21 @@
 {
+  "trailingSlash": false,
   "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/aviso-legal/index.html",
+      "destination": "/aviso-legal",
+      "permanent": true
+    },
+    {
+      "source": "/privacidad/index.html",
+      "destination": "/privacidad",
+      "permanent": true
+    },
     {
       "source": "/",
       "has": [{ "type": "host", "value": "www.solunit.es" }],
