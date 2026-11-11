@@ -688,19 +688,52 @@ function contactErrors(fields: ReturnType<typeof readContactForm>): ContactError
   return errors
 }
 
+function contactBody(fields: ReturnType<typeof readContactForm>) {
+  return `Nombre: ${fields.name}\nEmpresa: ${fields.company}\nEmail: ${fields.email}\n\n${fields.message}`
+}
+
 function mailtoHref(fields: ReturnType<typeof readContactForm>) {
   const subject = encodeURIComponent(`Proyecto Solunit — ${fields.company || fields.name}`)
-  const body = encodeURIComponent(
-    `Nombre: ${fields.name}\nEmpresa: ${fields.company}\nEmail: ${fields.email}\n\n${fields.message}`,
-  )
+  const body = encodeURIComponent(contactBody(fields))
   return `mailto:${contact.email}?subject=${subject}&body=${body}`
 }
+
+function copyWithSelection(text: string) {
+  const area = document.createElement('textarea')
+  area.value = text
+  area.setAttribute('readonly', '')
+  area.setAttribute('aria-hidden', 'true')
+  area.style.position = 'fixed'
+  area.style.top = '0'
+  area.style.left = '0'
+  area.style.opacity = '0'
+  document.body.appendChild(area)
+  area.focus()
+  area.select()
+  const ok = document.execCommand('copy')
+  area.remove()
+  if (!ok) return Promise.reject(new Error('copy'))
+  return Promise.resolve()
+}
+
+function copyContactBody(text: string) {
+  if (navigator.clipboard?.writeText) {
+    return navigator.clipboard.writeText(text).catch(() => copyWithSelection(text))
+  }
+  return copyWithSelection(text)
+}
+
+type ContactDraft = ReturnType<typeof readContactForm>
+type CopyState = 'idle' | 'done' | 'failed'
 
 function Contact() {
   const [errors, setErrors] = useState<ContactErrors>({})
   const [submitted, setSubmitted] = useState(false)
   const [sent, setSent] = useState(false)
+  const [draft, setDraft] = useState<ContactDraft | null>(null)
+  const [copyState, setCopyState] = useState<CopyState>('idle')
   const focusField = useRef<ContactField | null>(null)
+  const copyButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const field = focusField.current
@@ -729,15 +762,35 @@ function Contact() {
     if (firstInvalid) {
       focusField.current = firstInvalid
       setSent(false)
+      setDraft(null)
+      setCopyState('idle')
       return
     }
 
-    window.location.href = mailtoHref(fields)
+    setDraft(fields)
+    setCopyState('idle')
     setSent(true)
+    window.location.href = mailtoHref(fields)
+  }
+
+  async function onCopy() {
+    if (!draft) return
+    try {
+      await copyContactBody(contactBody(draft))
+      setCopyState('done')
+    } catch {
+      setCopyState('failed')
+    } finally {
+      copyButton.current?.focus()
+    }
   }
 
   function onInput(event: FormEvent<HTMLFormElement>) {
-    if (sent) setSent(false)
+    if (sent) {
+      setSent(false)
+      setDraft(null)
+      setCopyState('idle')
+    }
     if (!submitted) return
     const fields = readContactForm(event.currentTarget)
     const next = contactErrors(fields)
@@ -861,14 +914,23 @@ function Contact() {
               Responsable: {owner.name}. El mensaje sirve para responderte y no se guarda en esta
               web. <a href="/privacidad">Política de privacidad</a>.
             </p>
-            <p className="form-note form-status" id="contact-form-status" role="status">
-              {sent ? (
-                <>
-                  {contact.formSent}{' '}
-                  <a href={`mailto:${contact.email}`}>{contact.email}</a>.
-                </>
-              ) : null}
-            </p>
+            {sent ? (
+              <div className="form-followup" id="contact-form-status">
+                <p className="form-note form-status" role="status">
+                  {contact.formSent} <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+                  {copyState === 'done' ? ` ${contact.formCopied}` : null}
+                  {copyState === 'failed' ? ` ${contact.formCopyFailed}` : null}
+                </p>
+                <button
+                  ref={copyButton}
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={onCopy}
+                >
+                  {contact.formCopy}
+                </button>
+              </div>
+            ) : null}
           </form>
         </div>
       </div>

@@ -1179,6 +1179,13 @@ textarea {
   text-underline-offset: 0.25em;
 }
 
+.form-followup {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  scroll-margin-top: calc(var(--header) + 0.75rem);
+}
+
 /* Pie */
 
 .site-footer {
