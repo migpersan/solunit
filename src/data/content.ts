@@ -39,70 +39,6 @@ export const services = [
   },
 ] as const
 
-export const reasons = [
-  {
-    title: 'Solidez',
-    description:
-      'Procesos claros, documentación, seguridad y compromiso de mantenimiento.',
-  },
-  {
-    title: 'Ingeniería de verdad',
-    description:
-      'Arquitectura y calidad pensadas para aguantar el uso real, no demos de escaparate.',
-  },
-  {
-    title: 'Innovación aplicada',
-    description:
-      'IA y automatización cuando mejoran el resultado; nunca como adorno.',
-  },
-  {
-    title: 'Hecha para crecer',
-    description:
-      'Empezamos donde estás hoy y diseñamos para lo que vendrá mañana.',
-  },
-] as const
-
-/**
- * Casos provisionales (issue #1): sustituir por proyectos reales con nombre,
- * reto, qué se construyó y resultado verificable. No añadir métricas sin fuente.
- */
-export const projectsIntro = {
-  title: 'Qué construimos',
-  intro:
-    'Cuatro operativas de empresa. El cliente y el resultado se publican cuando se pueden contar.',
-} as const
-
-export const projects = [
-  {
-    name: 'Agenda y cobros',
-    sector: 'Servicios',
-    challenge: 'Clientes, huecos y pagos viven en conversaciones distintas.',
-    built: 'Una aplicación con reservas, mensajes y cobros en el mismo sitio.',
-    result: 'El día completo se ve en un solo producto.',
-  },
-  {
-    name: 'Trámites dispersos',
-    sector: 'Gestión',
-    challenge: 'La misma gestión obliga a saltar de portal en portal.',
-    built: 'Un entorno con el estado de cada trámite a la vista.',
-    result: 'Se sabe en qué punto está cada gestión, sin salir del producto.',
-  },
-  {
-    name: 'Trabajo de campo',
-    sector: 'Operaciones',
-    challenge: 'Lo que ocurre fuera de la oficina se anota a mano y llega tarde.',
-    built: 'Una captura en el momento: nota, foto y ubicación.',
-    result: 'El dato nace digital y se puede seguir.',
-  },
-  {
-    name: 'Catálogo y ventas',
-    sector: 'Comercio',
-    challenge: 'La presencia digital no refleja el catálogo ni la forma de vender.',
-    built: 'Una web de producto alineada con el catálogo y fácil de mantener.',
-    result: 'Un canal digital que la empresa puede hacer evolucionar.',
-  },
-] as const
-
 export const method = [
   {
     step: '01',
@@ -195,29 +131,6 @@ export const lab = {
   ],
 } as const
 
-export const technologies = {
-  intro:
-    'Elegimos el stack según el problema, no según la moda. Experiencia concreta en entornos de producto real.',
-  groups: [
-    {
-      title: 'Web',
-      items: ['React', 'TypeScript', 'Vite', 'Next.js'],
-    },
-    {
-      title: 'Apps',
-      items: ['Capacitor', 'Android', 'PWA'],
-    },
-    {
-      title: 'Backend y APIs',
-      items: ['Node.js', 'Drupal', 'REST', 'Integraciones'],
-    },
-    {
-      title: 'Datos e IA aplicada',
-      items: ['Automatización', 'Modelos de IA', 'Flujos de negocio'],
-    },
-  ],
-} as const
-
 export const contact = {
   title: 'Hablemos de tu proyecto',
   support:
@@ -229,8 +142,6 @@ export const contact = {
 
 export const nav = [
   { label: 'Servicios', href: '#servicios' },
-  { label: 'Por qué Solunit', href: '#por-que' },
-  { label: 'Proyectos', href: '#proyectos' },
   { label: 'Método', href: '#metodo' },
   { label: 'Contacto', href: '#contacto' },
 ] as const

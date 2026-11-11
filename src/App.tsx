@@ -7,11 +7,7 @@ import {
   lab,
   method,
   nav,
-  projects,
-  projectsIntro,
-  reasons,
   services,
-  technologies,
 } from './data/content'
 
 const serviceId = (index: number) => `servicio-${index + 1}`
@@ -303,17 +299,6 @@ function Hero() {
           />
         </div>
       </div>
-
-      <ul className="hero-index" aria-label="Qué hacemos">
-        {services.map((service, index) => (
-          <li key={service.title}>
-            <a href={`#${serviceId(index)}`}>
-              <span className="num">{twoDigits(index)}</span>
-              {service.title}
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
   )
 }
@@ -380,65 +365,6 @@ function Services() {
           </li>
         ))}
       </ol>
-    </Section>
-  )
-}
-
-function Why() {
-  return (
-    <Section
-      id="por-que"
-      titleId="why-title"
-      eyebrow="Por qué Solunit"
-      title="Ingeniería, calidad y visión de crecimiento"
-      intro="Construimos con la seriedad de una empresa de software y la cercanía de un equipo que entiende tu negocio."
-    >
-      <div className="reasons-grid">
-        {reasons.map((reason) => (
-          <article className="reason" key={reason.title}>
-            <h3>{reason.title}</h3>
-            <p>{reason.description}</p>
-          </article>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-function Projects() {
-  return (
-    <Section
-      id="proyectos"
-      titleId="projects-title"
-      eyebrow="Proyectos"
-      title={projectsIntro.title}
-      intro={projectsIntro.intro}
-      layout="stack"
-    >
-      <div className="projects-grid">
-        {projects.map((project) => (
-          <article className="project" key={project.name}>
-            <header>
-              <p className="sector">{project.sector}</p>
-              <h3>{project.name}</h3>
-            </header>
-            <dl>
-              <div>
-                <dt>Reto</dt>
-                <dd>{project.challenge}</dd>
-              </div>
-              <div>
-                <dt>Qué construimos</dt>
-                <dd>{project.built}</dd>
-              </div>
-              <div className="result">
-                <dt>Resultado</dt>
-                <dd>{project.result}</dd>
-              </div>
-            </dl>
-          </article>
-        ))}
-      </div>
     </Section>
   )
 }
@@ -591,31 +517,6 @@ function Lab() {
   )
 }
 
-function Technologies() {
-  return (
-    <Section
-      id="tecnologias"
-      titleId="tech-title"
-      eyebrow="Tecnologías"
-      title="Experiencia técnica concreta"
-      intro={technologies.intro}
-    >
-      <div className="tech-groups">
-        {technologies.groups.map((group) => (
-          <div className="tech-group" key={group.title}>
-            <h3>{group.title}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
 function Contact() {
   const [sent, setSent] = useState(false)
 
@@ -763,11 +664,8 @@ export default function App() {
       <main id="contenido" tabIndex={-1}>
         <Hero />
         <Services />
-        <Why />
-        <Projects />
         <Method />
         <Lab />
-        <Technologies />
         <Contact />
       </main>
       <Footer />

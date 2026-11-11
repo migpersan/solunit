@@ -517,44 +517,6 @@ textarea {
   filter: drop-shadow(0 20px 40px rgba(86, 193, 233, 0.2));
 }
 
-/* Índice de servicios al pie del primer pantallazo. Solo en escritorio:
-   en móvil la sección de servicios llega justo después. */
-.hero-index {
-  display: none;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-
-.hero-index a {
-  display: grid;
-  gap: 0.3rem;
-  height: 100%;
-  padding: 1.1rem 1rem 1.3rem 0;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.35;
-  transition: color 160ms ease;
-}
-
-.hero-index li + li a {
-  padding-left: 1rem;
-  border-left: 1px solid var(--line);
-}
-
-.hero-index .num {
-  color: var(--cyan);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  font-variant-numeric: tabular-nums;
-}
-
-.hero-index a:hover {
-  color: var(--text);
-}
-
 /* ---------- Secciones ---------- */
 
 .section {
@@ -656,102 +618,6 @@ textarea {
   margin: 0;
   color: var(--muted);
   max-width: 38rem;
-}
-
-/* Por qué Solunit */
-
-.reasons-grid {
-  display: grid;
-  border-top: 1px solid var(--line);
-}
-
-.reason {
-  padding: 1.5rem 0 1.6rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.reason h3 {
-  margin: 0 0 0.5rem;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  letter-spacing: -0.01em;
-}
-
-.reason p {
-  margin: 0;
-  color: var(--muted);
-}
-
-/* Proyectos */
-
-.projects-grid {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.project {
-  display: grid;
-  align-content: start;
-  gap: 1.25rem;
-  padding: clamp(1.35rem, 3vw, 1.9rem);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-panel);
-  container: project / inline-size;
-}
-
-.project .sector {
-  margin: 0 0 0.5rem;
-  color: var(--cyan);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.project h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.project dl {
-  margin: 0;
-}
-
-.project dl > div {
-  display: grid;
-  gap: 0.2rem;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--line);
-}
-
-.project dl > div:last-child {
-  padding-bottom: 0;
-}
-
-.project dt {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.9;
-}
-
-.project dd {
-  margin: 0;
-  color: var(--muted);
-}
-
-.project .result dt {
-  color: var(--cyan);
-}
-
-.project .result dd {
-  color: var(--text);
 }
 
 /* Método */
@@ -1103,50 +969,6 @@ textarea {
   }
 }
 
-/* Tecnologías */
-
-.tech-groups {
-  border-bottom: 1px solid var(--line);
-}
-
-.tech-group {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1.15rem 0 1.25rem;
-  border-top: 1px solid var(--line);
-}
-
-.tech-group h3 {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.9;
-}
-
-.tech-group ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem 0.7rem;
-}
-
-.tech-group li {
-  display: inline-flex;
-  gap: 0.7rem;
-  font-size: 1.02rem;
-}
-
-.tech-group li:not(:last-child)::after {
-  content: '·';
-  color: var(--cyan);
-  opacity: 0.7;
-}
-
 /* Contacto */
 
 .contact-panel {
@@ -1362,35 +1184,6 @@ textarea {
   .field-row {
     grid-template-columns: 1fr 1fr;
   }
-
-  .reasons-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .reason {
-    padding: 1.6rem 1.75rem 1.75rem 0;
-  }
-
-  .reason:nth-child(even) {
-    padding-left: 1.75rem;
-    padding-right: 0;
-    border-left: 1px solid var(--line);
-  }
-
-  .tech-group {
-    grid-template-columns: 11.5rem minmax(0, 1fr);
-    gap: 1rem;
-    align-items: baseline;
-  }
-}
-
-/* La ficha pasa a dos columnas según el ancho de la tarjeta, no de la pantalla. */
-@container project (min-width: 26rem) {
-  .project dl > div {
-    grid-template-columns: 9.5rem minmax(0, 1fr);
-    gap: 1rem;
-    align-items: baseline;
-  }
 }
 
 @media print {
@@ -1401,10 +1194,6 @@ textarea {
 }
 
 @media (min-width: 760px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .contact-panel {
     grid-template-columns: 1fr 1.05fr;
     gap: clamp(2rem, 5vw, 4rem);
@@ -1436,19 +1225,8 @@ textarea {
     display: none;
   }
 
-  .hero {
-    grid-template-rows: 1fr auto;
-    padding-bottom: 0;
-  }
-
   .hero-grid {
     grid-template-columns: 1.15fr 0.85fr;
-    padding-bottom: clamp(2rem, 4vw, 3rem);
-  }
-
-  .hero-index {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .section-split .section-grid {
