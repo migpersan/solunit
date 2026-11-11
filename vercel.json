@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.solunit.es" }],
+      "destination": "https://solunit.es/:path*",
+      "permanent": true
+    }
+  ]
+}
