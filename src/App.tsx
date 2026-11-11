@@ -365,6 +365,8 @@ function Contact() {
   )
 }
 
+const copyrightYear = new Date().getFullYear()
+
 function Footer() {
   return (
     <footer className="site-footer">
@@ -373,7 +375,10 @@ function Footer() {
           <strong>{brand.name}</strong>
           <div>{brand.tagline}</div>
         </div>
-        <div>© {new Date().getFullYear()} Solunit. Todos los derechos reservados.</div>
+        <div>
+          © <span suppressHydrationWarning>{copyrightYear}</span> Solunit. Todos los
+          derechos reservados.
+        </div>
       </div>
     </footer>
   )
