@@ -1549,7 +1549,7 @@ textarea {
   }
 }
 
-/* Por debajo de 600px el titular a tamaño completo ocupa cuatro
+/* Por debajo de 600px el titular a tamaño completo ocupa cinco
    líneas y empuja los CTA. Baja a 2.6rem (tres líneas), por encima
    del 2.15rem que pedía el índice ya eliminado. */
 @media (min-width: 980px) and (max-height: 600px) {
@@ -1560,6 +1560,17 @@ textarea {
 
   .hero h1 {
     font-size: 2.6rem;
+  }
+}
+
+/* Entre 601 y 640px de alto, desde 1080px de ancho, el titular a
+   3.75rem sigue en cinco líneas y el segundo CTA queda en el borde
+   o fuera: el anillo de foco no cabe. 3.15rem lo deja dentro, en
+   tres o cuatro líneas. Por debajo de 600px manda el ajuste anterior.
+   Desde 641px vuelve la escala completa. El texto del hero no cambia. */
+@media (min-width: 1080px) and (min-height: 601px) and (max-height: 640px) {
+  .hero h1 {
+    font-size: 3.15rem;
   }
 }
 
