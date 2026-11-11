@@ -14,7 +14,6 @@ import { pageMeta, type PageId } from './data/pages'
 import LegalPage from './LegalPage'
 
 const serviceId = (index: number) => `servicio-${index + 1}`
-const twoDigits = (index: number) => String(index + 1).padStart(2, '0')
 
 function useActiveSection(ids: readonly string[]) {
   const [active, setActive] = useState<string | null>(null)
@@ -211,6 +210,7 @@ function Header({ home }: { home: boolean }) {
       document.querySelector('.site-header .brand-lockup'),
       document.querySelector('.nav-links'),
       document.querySelector('.nav-cta'),
+      document.querySelector('.nav-cta-compact'),
       document.getElementById('contenido'),
       document.querySelector('.site-footer'),
     ].filter((node): node is HTMLElement => node instanceof HTMLElement)
@@ -320,6 +320,15 @@ function Header({ home }: { home: boolean }) {
           onClick={(event) => goToSection(event, hero.primaryCta.href)}
         >
           {hero.primaryCta.label}
+        </a>
+
+        <a
+          className="btn btn-primary nav-cta-compact"
+          href={sectionHref(hero.primaryCta.href)}
+          aria-label={hero.primaryCta.label}
+          onClick={(event) => goToSection(event, hero.primaryCta.href)}
+        >
+          Hablemos
         </a>
 
         <button
@@ -474,21 +483,16 @@ function Services() {
       titleId="services-title"
       eyebrow="Servicios"
       title="Capacidad técnica para resolver y escalar"
-      intro="Soluciones únicas orientadas a operativa real, diseñadas para evolucionar con tu empresa."
+      intro="Lo que podemos construir. Una pieza o el conjunto."
     >
-      <ol className="services-list">
+      <ul className="services-list">
         {services.map((service, index) => (
           <li className="service-row" id={serviceId(index)} key={service.title}>
-            <span className="num" aria-hidden="true">
-              {twoDigits(index)}
-            </span>
-            <div>
-              <h3 tabIndex={-1}>{service.title}</h3>
-              <p>{service.description}</p>
-            </div>
+            <h3 tabIndex={-1}>{service.title}</h3>
+            <p>{service.description}</p>
           </li>
         ))}
-      </ol>
+      </ul>
     </Section>
   )
 }
@@ -500,7 +504,7 @@ function Method() {
       titleId="method-title"
       eyebrow="Método"
       title="Nuestra forma de trabajar"
-      intro="Un proceso claro de extremo a extremo: de entender el problema a evolucionar la solución."
+      intro="El orden del trabajo, de la primera conversación al mantenimiento."
       layout="stack"
     >
       <ol className="method-list">
@@ -674,6 +678,15 @@ function Lab() {
 
           <p className="lab-outcome" aria-live="polite">
             {selected.outcome}
+          </p>
+          <p className="lab-next">
+            <a
+              className="btn btn-secondary"
+              href={hero.primaryCta.href}
+              onClick={(event) => followAnchor(event, hero.primaryCta.href)}
+            >
+              {hero.primaryCta.label}
+            </a>
           </p>
         </div>
       </div>
@@ -854,6 +867,9 @@ function Contact() {
             </div>
             <div className="field">
               <label htmlFor="message">Qué necesitas</label>
+              <p className="field-hint" id="message-hint">
+                {contact.formMessageHint}
+              </p>
               <textarea
                 id="message"
                 name="message"
@@ -861,7 +877,7 @@ function Contact() {
                 maxLength={2000}
                 enterKeyHint="send"
                 aria-invalid={errors.message ? true : undefined}
-                aria-describedby={errors.message ? 'message-error' : undefined}
+                aria-describedby={errors.message ? 'message-hint message-error' : 'message-hint'}
               />
               {errors.message ? (
                 <p className="field-error" id="message-error">
@@ -874,7 +890,7 @@ function Contact() {
               type="submit"
               aria-describedby="contact-form-hint contact-form-privacy"
             >
-              Enviar mensaje
+              {contact.formSubmit}
             </button>
             <p className="form-note" id="contact-form-hint">
               {contact.formHint}
