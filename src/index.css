@@ -77,6 +77,16 @@ a {
   outline-offset: 3px;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;
@@ -686,6 +696,37 @@ textarea {
   50% {
     border-radius: 60% 40% 55% 45% / 55% 60% 40% 45%;
     transform: rotate(8deg);
+  }
+}
+
+@media (max-width: 359px) {
+  .hero {
+    padding-top: 1.35rem;
+  }
+
+  .hero-brand {
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-brand .name {
+    font-size: 2.05rem;
+  }
+
+  .hero h1 {
+    font-size: 1.58rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .hero .support {
+    margin-bottom: 1.05rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
   }
 }
 
