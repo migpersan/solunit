@@ -62,7 +62,16 @@ export const reasons = [
   },
 ] as const
 
-/** Placeholders — sustituir mañana con casos reales y métricas verificables */
+/**
+ * Casos provisionales (issue #1): sustituir por proyectos reales con nombre,
+ * reto, qué se construyó y resultado verificable. No añadir métricas sin fuente.
+ */
+export const projectsIntro = {
+  title: 'Qué hemos construido',
+  intro:
+    'Una selección de encargos recientes: el reto, lo que construimos y lo que cambió.',
+} as const
+
 export const projects = [
   {
     name: 'Plataforma de acompañamiento',
@@ -150,6 +159,8 @@ export const contact = {
   support:
     'Una conversación para entender el reto y ver si encajamos. Sin compromiso y con claridad desde el primer momento.',
   email: 'hola@solunit.es',
+  formHint: 'Al enviar se abre tu aplicación de correo con el mensaje ya redactado.',
+  formSent: 'Mensaje preparado en tu aplicación de correo. Si no se ha abierto, escríbenos a',
 } as const
 
 export const nav = [
