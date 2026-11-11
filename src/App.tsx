@@ -733,6 +733,7 @@ function Contact() {
             method="post"
             encType="text/plain"
             noValidate
+            aria-labelledby="contact-title"
             onSubmit={onSubmit}
             onInput={onInput}
           >
@@ -755,9 +756,7 @@ function Contact() {
                 ) : null}
               </div>
               <div className="field">
-                <label htmlFor="company">
-                  Empresa <span className="optional">(opcional)</span>
-                </label>
+                <label htmlFor="company">Empresa (opcional)</label>
                 <input
                   id="company"
                   name="company"
