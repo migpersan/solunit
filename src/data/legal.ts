@@ -1,4 +1,4 @@
-import { contact } from './content'
+import { contact, hero } from './content'
 
 /** Titular persona física. La sociedad no está constituida. */
 export const owner = {
@@ -21,8 +21,7 @@ export function organizationJsonLd() {
     url: owner.site,
     logo: `${owner.site}logo.png`,
     email: owner.email,
-    description:
-      'Tecnología a medida para empresas que quieren llegar más lejos. Diseñamos, desarrollamos y evolucionamos software, plataformas digitales y aplicaciones.',
+    description: hero.support,
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Manuela Macías, 22',
