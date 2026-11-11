@@ -310,6 +310,8 @@ textarea {
   font-weight: 650;
   letter-spacing: 0.01em;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
   transition:
     transform 160ms ease,
     background 160ms ease,
@@ -355,6 +357,8 @@ textarea {
   background: var(--bg-elevated);
   color: var(--text);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
 }
 
 .nav-scrim {
@@ -381,8 +385,19 @@ textarea {
 
 .mobile-nav.is-open {
   display: block;
-  position: relative;
+  position: fixed;
   z-index: 31;
+  top: var(--header);
+  right: 0;
+  left: 0;
+  /* En horizontal la lista mide más que la pantalla. Con el scroll
+     de la página bloqueado, lo que queda fuera no se puede alcanzar. */
+  max-height: calc(100vh - var(--header));
+  max-height: calc(100svh - var(--header));
+  max-height: calc(100dvh - var(--header));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(86, 193, 233, 0.45) transparent;
 }
 
 .mobile-nav .site-shell {
@@ -394,6 +409,12 @@ textarea {
   padding: 0.75rem 0.25rem 0.75rem 0.7rem;
   border-left: 2px solid transparent;
   color: var(--muted);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
+}
+
+.mobile-nav a:not(.btn):active {
+  color: var(--text);
 }
 
 .mobile-nav a:not(.btn)[aria-current] {
