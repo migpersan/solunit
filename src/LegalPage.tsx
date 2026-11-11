@@ -155,7 +155,8 @@ function Privacidad() {
           El formulario no envía los datos a un servidor de {owner.sign}. Al pulsar «Abrir en el
           correo», el navegador abre tu aplicación de correo con el texto ya escrito. El envío lo
           haces tú desde esa aplicación. Si no tienes un correo configurado, el mensaje no sale y
-          en esta web no queda copia.
+          en esta web no queda copia. «Copiar mensaje» deja ese mismo texto en el portapapeles de
+          tu dispositivo, no en esta web.
         </p>
       </section>
 

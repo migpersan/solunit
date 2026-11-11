@@ -141,6 +141,9 @@ export const contact = {
   formHint: 'El mensaje no sale de esta página: lo envías tú desde tu correo.',
   formMessageHint: 'El problema, quién lo vive y qué tendría que quedar resuelto.',
   formSent: 'Mensaje preparado en tu aplicación de correo. Si no se ha abierto, escríbenos a',
+  formCopy: 'Copiar mensaje',
+  formCopied: 'El texto ya está en el portapapeles.',
+  formCopyFailed: 'No se ha podido copiar. Escríbenos a mano a esa dirección.',
   formErrors: {
     name: 'Escribe tu nombre.',
     email: 'Escribe un email de contacto.',
