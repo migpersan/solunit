@@ -14,7 +14,9 @@ function Identity() {
       </div>
       <div>
         <dt>Documento</dt>
-        <dd>DNI {owner.idDocument}</dd>
+        {/* Sigue visible en la página. data-nosnippet evita que el buscador
+            lo use como extracto si ignora la descripción. */}
+        <dd data-nosnippet="">{`DNI ${owner.idDocument}`}</dd>
       </div>
       <div>
         <dt>Domicilio</dt>
