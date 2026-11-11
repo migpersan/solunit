@@ -300,6 +300,18 @@ textarea {
   white-space: nowrap;
 }
 
+/* En el móvil el botón completo no cabe. Este lleva al mismo sitio
+   y queda visible sin abrir el menú. */
+.nav-cta-compact {
+  display: inline-flex;
+  margin-left: auto;
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.88rem;
+  box-shadow: none;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -603,25 +615,17 @@ textarea {
 }
 
 .service-row {
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: 0 1rem;
-  padding: 1.5rem 0 1.6rem;
+  padding: 1.35rem 0 1.45rem;
   border-top: 1px solid var(--line);
   scroll-margin-top: 1rem;
 }
 
-.service-row .num,
 .method-item .step {
   color: var(--cyan);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   font-variant-numeric: tabular-nums;
-}
-
-.service-row .num {
-  padding-top: 0.42rem;
 }
 
 .service-row h3 {
@@ -822,6 +826,10 @@ textarea {
 
 .lab-outcome {
   color: var(--muted);
+}
+
+.lab-next {
+  margin: 0;
 }
 
 .lab-app {
@@ -1046,6 +1054,13 @@ textarea {
 .field label {
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+.field-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
 }
 
 .field input,
@@ -1301,6 +1316,31 @@ textarea {
   transition-delay: 90ms;
 }
 
+/* Hasta aquí el botón «Hablemos» y el menú salen del margen. */
+@media (max-width: 400px) {
+  .site-header .inner {
+    gap: 0.4rem;
+  }
+
+  .brand-lockup {
+    gap: 0.4rem;
+  }
+
+  .brand-lockup img {
+    height: 32px;
+  }
+
+  .brand-lockup strong {
+    letter-spacing: 0.06em;
+    font-size: 0.88rem;
+  }
+
+  .nav-cta-compact {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.82rem;
+  }
+}
+
 @media (max-width: 359px) {
   .hero {
     padding-top: 1.35rem;
@@ -1406,6 +1446,7 @@ textarea {
     display: inline-flex;
   }
 
+  .nav-cta-compact,
   .menu-toggle {
     display: none;
   }

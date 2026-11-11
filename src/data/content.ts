@@ -134,9 +134,11 @@ export const lab = {
 export const contact = {
   title: 'Hablemos de tu proyecto',
   support:
-    'Una conversación para entender el reto y ver si encajamos. Sin compromiso y con claridad desde el primer momento.',
+    'Cuéntanos el problema y quién lo vive. Respondemos por correo, sin compromiso.',
   email: 'info@kedai.es',
-  formHint: 'Al enviar se abre tu aplicación de correo con el mensaje ya redactado.',
+  formSubmit: 'Abrir en el correo',
+  formHint: 'El mensaje no sale de esta página: lo envías tú desde tu correo.',
+  formMessageHint: 'El problema, quién lo vive y qué tendría que quedar resuelto.',
   formSent: 'Mensaje preparado en tu aplicación de correo. Si no se ha abierto, escríbenos a',
   formErrors: {
     name: 'Escribe tu nombre.',
@@ -150,5 +152,6 @@ export const contact = {
 export const nav = [
   { label: 'Servicios', href: '#servicios' },
   { label: 'Método', href: '#metodo' },
+  { label: 'Ejemplo', href: '#laboratorio' },
   { label: 'Contacto', href: '#contacto' },
 ] as const
