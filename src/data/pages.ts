@@ -10,7 +10,9 @@ export const pageMeta = {
   },
   'aviso-legal': {
     title: 'Aviso legal — Solunit',
-    description: `Titular de solunit.es: ${owner.name}, DNI ${owner.idDocument}, domicilio en ${owner.address}.`,
+    // El documento va en el texto de la página, no en la ficha: Google y las
+    // tarjetas sociales leen esta frase.
+    description: `Titular de solunit.es: ${owner.name}. Identidad, domicilio y condiciones de uso del sitio, conforme a la Ley 34/2002.`,
     canonical: `${owner.site}aviso-legal`,
   },
   privacidad: {

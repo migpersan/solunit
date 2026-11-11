@@ -158,8 +158,21 @@ try {
       if (!html.includes(owner.name) || !html.includes(owner.idDocument) || !html.includes(owner.address)) {
         throw new Error(`La página ${output.id} no incluye la identidad del titular.`)
       }
+      if (!html.includes(`data-nosnippet="">DNI ${owner.idDocument}`)) {
+        throw new Error(`El documento de ${output.id} tiene que seguir en la página y fuera del extracto.`)
+      }
+      const headEnd = html.indexOf('<body')
+      const head = headEnd === -1 ? html : html.slice(0, headEnd)
+      if (head.includes(owner.idDocument)) {
+        throw new Error(
+          `La cabecera de ${output.id} no debe incluir el documento de identidad. Va en el texto de la página.`,
+        )
+      }
       if (!html.includes(`<title>${meta.title}</title>`) || !html.includes(meta.canonical)) {
         throw new Error(`La cabecera de ${output.id} no coincide con su ficha.`)
+      }
+      if (!html.includes(`content="${meta.description}"`)) {
+        throw new Error(`La ficha de ${output.id} no llega a la descripción.`)
       }
     }
 
