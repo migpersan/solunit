@@ -91,20 +91,38 @@
         outline-offset: 3px;
       }
 
+      /* Igual que la home: fijo y ya visible. Anclado al documento,
+         el salto con teclado mueve la página y deja el enlace fuera. */
       .skip-link {
-        position: absolute;
-        left: calc(1rem + env(safe-area-inset-left, 0px));
-        top: -4rem;
+        position: fixed;
         z-index: 2;
+        left: calc(1rem + env(safe-area-inset-left, 0px));
+        top: calc(1rem + env(safe-area-inset-top, 0px));
         padding: 0.75rem 1rem;
         border-radius: 999px;
         background: var(--cyan);
         color: #041018;
         font-weight: 700;
+        white-space: nowrap;
+        touch-action: manipulation;
       }
 
-      .skip-link:focus {
-        top: calc(1rem + env(safe-area-inset-top, 0px));
+      .skip-link:not(:focus) {
+        width: 1px;
+        height: 1px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      @media (forced-colors: active) {
+        .skip-link:focus {
+          background: Highlight;
+          color: HighlightText;
+        }
       }
 
       /* Misma caja que la home: el texto no pierde los 1120px y, si el

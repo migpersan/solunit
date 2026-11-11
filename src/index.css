@@ -176,21 +176,39 @@ p {
   text-wrap: pretty;
 }
 
+/* Fijo y ya dentro de la ventana. Si cuelga del documento, al
+   enfocarlo con el teclado la página salta hacia arriba y el
+   enlace se queda fuera. Sin foco es un punto: no tapa el logo. */
 .skip-link {
-  position: absolute;
-  left: calc(1rem + env(safe-area-inset-left, 0px));
-  top: -4rem;
+  position: fixed;
   z-index: 100;
+  left: calc(1rem + env(safe-area-inset-left, 0px));
+  top: calc(1rem + env(safe-area-inset-top, 0px));
   padding: 0.75rem 1rem;
   border-radius: 999px;
   background: var(--cyan);
   color: #041018;
   font-weight: 700;
-  transition: top 160ms ease;
+  white-space: nowrap;
+  touch-action: manipulation;
 }
 
-.skip-link:focus {
-  top: calc(1rem + env(safe-area-inset-top, 0px));
+.skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  .skip-link:focus {
+    background: Highlight;
+    color: HighlightText;
+  }
 }
 
 /* El ancla recibe el foco al saltar. Un marco alrededor de toda
@@ -1693,8 +1711,7 @@ textarea {
 
   .btn,
   .nav-links a::after,
-  .lab-option,
-  .skip-link {
+  .lab-option {
     transition: none !important;
     animation: none !important;
   }
