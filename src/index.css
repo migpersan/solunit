@@ -183,6 +183,14 @@ p {
   top: 1rem;
 }
 
+/* El ancla recibe el foco al saltar. Un marco alrededor de toda
+   la sección taparía la página, así que el indicador queda en los controles. */
+.hero:focus,
+.section:focus,
+#contenido:focus {
+  outline: none;
+}
+
 img {
   max-width: 100%;
   display: block;
@@ -206,15 +214,15 @@ textarea {
   top: 0;
   z-index: 40;
   height: var(--header);
-  backdrop-filter: blur(16px);
-  background: rgba(5, 7, 10, 0.72);
+  /* Sin backdrop-filter: un filtro aquí haría que el velo fijo
+     se posicionara respecto a la cabecera y no cubriera la página. */
+  background: #05070a;
   border-bottom: 1px solid transparent;
-  transition: border-color 200ms ease, background 200ms ease;
+  transition: border-color 200ms ease;
 }
 
 .site-header.is-scrolled {
   border-bottom-color: var(--line);
-  background: rgba(5, 7, 10, 0.88);
 }
 
 .site-header .inner {
@@ -349,16 +357,32 @@ textarea {
   cursor: pointer;
 }
 
+.nav-scrim {
+  position: fixed;
+  z-index: 30;
+  top: var(--header);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: rgba(5, 7, 10, 0.84);
+  cursor: pointer;
+}
+
 .mobile-nav {
   display: none;
   border-top: 1px solid var(--line);
-  background: rgba(5, 7, 10, 0.96);
-  padding: 1rem 0 1.25rem;
+  background: #05070a;
+  padding: 0.5rem 0 1.15rem;
 }
 
 .mobile-nav.is-open {
   display: block;
-  background: #05070a;
+  position: relative;
+  z-index: 31;
 }
 
 .mobile-nav .site-shell {
@@ -367,8 +391,14 @@ textarea {
 }
 
 .mobile-nav a:not(.btn) {
-  padding: 0.75rem 0.25rem;
+  padding: 0.75rem 0.25rem 0.75rem 0.7rem;
+  border-left: 2px solid transparent;
   color: var(--muted);
+}
+
+.mobile-nav a:not(.btn)[aria-current] {
+  border-left-color: var(--cyan);
+  color: var(--text);
 }
 
 .mobile-nav .btn {
@@ -840,13 +870,8 @@ textarea {
   color: var(--cyan);
   font-weight: 650;
   text-decoration: underline;
-  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
   text-underline-offset: 0.3em;
-  transition: text-decoration-color 160ms ease;
-}
-
-.email:hover {
-  text-decoration-color: currentColor;
 }
 
 .contact-copy .email {
