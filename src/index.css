@@ -274,6 +274,8 @@ textarea {
   color: var(--muted);
   font-size: 0.92rem;
   font-weight: 500;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
   transition: color 160ms ease;
 }
 
@@ -1499,17 +1501,25 @@ textarea {
   }
 }
 
-@media (min-width: 980px) {
+/* Desde 800px caben la marca, las cuatro secciones y «Hablemos de tu
+   proyecto». A 700px ese botón ya se sale, así que se queda el acceso
+   corto y el menú. El hero y el cuerpo siguen en una columna hasta 980px. */
+@media (min-width: 800px) {
   .nav-links,
   .btn.nav-cta {
     display: inline-flex;
   }
 
   .nav-cta-compact,
-  .menu-toggle {
+  .menu-toggle,
+  .nav-scrim,
+  .mobile-nav,
+  .mobile-nav.is-open {
     display: none;
   }
+}
 
+@media (min-width: 980px) {
   .hero-grid {
     grid-template-columns: 1.15fr 0.85fr;
   }
