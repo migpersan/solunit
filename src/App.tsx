@@ -93,6 +93,17 @@ function useReveal() {
 
 const navIds = nav.map((item) => item.href.slice(1))
 
+function revealInMenu(item: HTMLElement, menu: HTMLElement) {
+  const pad = 6
+  const itemRect = item.getBoundingClientRect()
+  const menuRect = menu.getBoundingClientRect()
+  if (itemRect.top < menuRect.top + pad) {
+    menu.scrollTop -= menuRect.top + pad - itemRect.top
+  } else if (itemRect.bottom > menuRect.bottom - pad) {
+    menu.scrollTop += itemRect.bottom - (menuRect.bottom - pad)
+  }
+}
+
 function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -141,16 +152,19 @@ function Header() {
       }
       if (event.key !== 'Tab') return
       const focusable = items()
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) return
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (focusable.length === 0) return
+      event.preventDefault()
+      const index = focusable.indexOf(document.activeElement as HTMLElement)
+      const nextIndex = event.shiftKey
+        ? index <= 0
+          ? focusable.length - 1
+          : index - 1
+        : index === -1 || index >= focusable.length - 1
+          ? 0
+          : index + 1
+      const next = focusable[nextIndex]
+      next?.focus({ preventScroll: true })
+      if (next && nav?.contains(next)) revealInMenu(next, nav)
     }
 
     const onResize = () => {
@@ -161,7 +175,10 @@ function Header() {
     window.addEventListener('resize', onResize)
     const current = nav?.querySelector<HTMLElement>('a[aria-current="location"]')
     const first = nav?.querySelector<HTMLElement>('a[href]')
-    ;(current ?? first)?.focus()
+    const target = current ?? first
+    // preventScroll: el documento está bloqueado. Solo se mueve el panel.
+    target?.focus({ preventScroll: true })
+    if (target && nav) revealInMenu(target, nav)
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('resize', onResize)
