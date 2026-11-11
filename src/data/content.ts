@@ -39,70 +39,6 @@ export const services = [
   },
 ] as const
 
-export const reasons = [
-  {
-    title: 'Solidez',
-    description:
-      'Procesos claros, documentación, seguridad y compromiso de mantenimiento.',
-  },
-  {
-    title: 'Ingeniería de verdad',
-    description:
-      'Arquitectura y calidad pensadas para aguantar el uso real, no demos de escaparate.',
-  },
-  {
-    title: 'Innovación aplicada',
-    description:
-      'IA y automatización cuando mejoran el resultado; nunca como adorno.',
-  },
-  {
-    title: 'Hecha para crecer',
-    description:
-      'Empezamos donde estás hoy y diseñamos para lo que vendrá mañana.',
-  },
-] as const
-
-/**
- * Casos provisionales (issue #1): sustituir por proyectos reales con nombre,
- * reto, qué se construyó y resultado verificable. No añadir métricas sin fuente.
- */
-export const projectsIntro = {
-  title: 'Qué hemos construido',
-  intro:
-    'Una selección de encargos recientes: el reto, lo que construimos y lo que cambió.',
-} as const
-
-export const projects = [
-  {
-    name: 'Plataforma de acompañamiento',
-    sector: 'Servicios / marketplace',
-    challenge: 'Digitalizar la relación entre clientes y profesionales con reservas y pagos.',
-    built: 'Aplicación web completa con perfiles, reservas, mensajería y cobros.',
-    result: 'Operativa centralizada y experiencia lista para escalar.',
-  },
-  {
-    name: 'Portal para autónomos',
-    sector: 'Productividad empresarial',
-    challenge: 'Unificar trámites, visibilidad y herramientas en un solo entorno digital.',
-    built: 'Producto web orientado a usuarios reales, con flujos claros y backend sólido.',
-    result: 'Base tecnológica preparada para crecer por módulos.',
-  },
-  {
-    name: 'App de campo y captura',
-    sector: 'Operaciones',
-    challenge: 'Sustituir procesos manuales por una herramienta usable en el día a día.',
-    built: 'Aplicación enfocada en velocidad de uso, datos fiables y despliegue práctico.',
-    result: 'Menos fricción operativa y mejor trazabilidad.',
-  },
-  {
-    name: 'Comercio y recambios',
-    sector: 'Retail / industrial',
-    challenge: 'Dar a la empresa una presencia digital alineada con su catálogo y ventas.',
-    built: 'Web y experiencia de producto orientada a conversión y mantenimiento sencillo.',
-    result: 'Canal digital profesional y evolucionable.',
-  },
-] as const
-
 export const method = [
   {
     step: '01',
@@ -131,25 +67,66 @@ export const method = [
   },
 ] as const
 
-export const technologies = {
+/**
+ * Ejemplos de operativa. Las filas de interfaz son ilustración,
+ * no métricas ni resultados de un cliente.
+ */
+export const lab = {
+  eyebrow: 'Ejemplo',
+  title: 'Del problema al software',
   intro:
-    'Elegimos el stack según el problema, no según la moda. Experiencia concreta en entornos de producto real.',
-  groups: [
+    'Elige una operativa. La pantalla es un ejemplo: el trabajo en curso y el paso que falta.',
+  cases: [
     {
-      title: 'Web',
-      items: ['React', 'TypeScript', 'Vite', 'Next.js'],
+      id: 'reservas',
+      label: 'Reservas y cobros sueltos',
+      problem:
+        'Clientes, huecos y pagos viven en conversaciones distintas. Nadie ve el día completo.',
+      app: 'Agenda',
+      when: 'Hoy',
+      rows: [
+        { primary: 'Consulta inicial', secondary: '09:30', state: 'Confirmada' },
+        { primary: 'Seguimiento', secondary: '11:00', state: 'Pendiente de pago' },
+        { primary: 'Cierre', secondary: '16:15', state: 'Mensaje sin leer' },
+      ],
+      open: 1,
+      trail: ['Perfil', 'Reserva', 'Mensaje', 'Cobro'],
+      trailAt: 3,
+      outcome: 'Reservas, mensajes y cobros quedan en el mismo producto.',
     },
     {
-      title: 'Apps',
-      items: ['Capacitor', 'Android', 'PWA'],
+      id: 'tramites',
+      label: 'Trámites en sitios distintos',
+      problem:
+        'La misma gestión obliga a saltar de portal en portal para saber en qué punto está.',
+      app: 'Gestiones',
+      when: 'En curso',
+      rows: [
+        { primary: 'Alta de actividad', secondary: 'Este mes', state: 'En revisión' },
+        { primary: 'Modelo trimestral', secondary: 'Trimestre', state: 'Falta un dato' },
+        { primary: 'Notificación', secondary: 'Hoy', state: 'Recibida' },
+      ],
+      open: 1,
+      trail: ['Trámite', 'Estado', 'Aviso', 'Archivo'],
+      trailAt: 1,
+      outcome: 'Cada gestión muestra en qué punto está, sin salir del producto.',
     },
     {
-      title: 'Backend y APIs',
-      items: ['Node.js', 'Drupal', 'REST', 'Integraciones'],
-    },
-    {
-      title: 'Datos e IA aplicada',
-      items: ['Automatización', 'Modelos de IA', 'Flujos de negocio'],
+      id: 'campo',
+      label: 'Parte de campo en papel',
+      problem:
+        'Lo que ocurre fuera de la oficina se anota a mano y llega tarde, o no llega.',
+      app: 'Parte',
+      when: 'Visita 14',
+      rows: [
+        { primary: 'Revisión de equipo', secondary: 'Foto y nota', state: 'Registrada' },
+        { primary: 'Incidencia', secondary: 'Ubicación', state: 'Guardada' },
+        { primary: 'Cierre de visita', secondary: 'Sin enviar', state: 'Pendiente' },
+      ],
+      open: 1,
+      trail: ['Captura', 'Validación', 'Registro', 'Seguimiento'],
+      trailAt: 2,
+      outcome: 'El dato nace en el momento y se puede seguir después.',
     },
   ],
 } as const
@@ -172,8 +149,6 @@ export const contact = {
 
 export const nav = [
   { label: 'Servicios', href: '#servicios' },
-  { label: 'Por qué Solunit', href: '#por-que' },
-  { label: 'Proyectos', href: '#proyectos' },
   { label: 'Método', href: '#metodo' },
   { label: 'Contacto', href: '#contacto' },
 ] as const

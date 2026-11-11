@@ -4,13 +4,10 @@ import {
   brand,
   contact,
   hero,
+  lab,
   method,
   nav,
-  projects,
-  projectsIntro,
-  reasons,
   services,
-  technologies,
 } from './data/content'
 
 const serviceId = (index: number) => `servicio-${index + 1}`
@@ -419,20 +416,6 @@ function Hero() {
           />
         </div>
       </div>
-
-      <ul className="hero-index" aria-label="Qué hacemos">
-        {services.map((service, index) => (
-          <li key={service.title}>
-            <a
-              href={`#${serviceId(index)}`}
-              onClick={(event) => followAnchor(event, `#${serviceId(index)}`)}
-            >
-              <span className="num">{twoDigits(index)}</span>
-              {service.title}
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
   )
 }
@@ -505,65 +488,6 @@ function Services() {
   )
 }
 
-function Why() {
-  return (
-    <Section
-      id="por-que"
-      titleId="why-title"
-      eyebrow="Por qué Solunit"
-      title="Ingeniería, calidad y visión de crecimiento"
-      intro="Construimos con la seriedad de una empresa de software y la cercanía de un equipo que entiende tu negocio."
-    >
-      <div className="reasons-grid">
-        {reasons.map((reason) => (
-          <article className="reason" key={reason.title}>
-            <h3>{reason.title}</h3>
-            <p>{reason.description}</p>
-          </article>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-function Projects() {
-  return (
-    <Section
-      id="proyectos"
-      titleId="projects-title"
-      eyebrow="Proyectos"
-      title={projectsIntro.title}
-      intro={projectsIntro.intro}
-      layout="stack"
-    >
-      <div className="projects-grid">
-        {projects.map((project) => (
-          <article className="project" key={project.name}>
-            <header>
-              <p className="sector">{project.sector}</p>
-              <h3>{project.name}</h3>
-            </header>
-            <dl>
-              <div>
-                <dt>Reto</dt>
-                <dd>{project.challenge}</dd>
-              </div>
-              <div>
-                <dt>Qué construimos</dt>
-                <dd>{project.built}</dd>
-              </div>
-              <div className="result">
-                <dt>Resultado</dt>
-                <dd>{project.result}</dd>
-              </div>
-            </dl>
-          </article>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
 function Method() {
   return (
     <Section
@@ -591,26 +515,122 @@ function Method() {
   )
 }
 
-function Technologies() {
+function caseIndexFromUrl() {
+  const id = new URLSearchParams(window.location.search).get('caso')
+  const index = lab.cases.findIndex((item) => item.id === id)
+  return index >= 0 ? index : 0
+}
+
+function Lab() {
+  const [active, setActive] = useState(0)
+  const [animate, setAnimate] = useState(false)
+  const usedPointer = useRef(false)
+  const selected = lab.cases[active] ?? lab.cases[0]
+
+  useEffect(() => {
+    const apply = () => {
+      setAnimate(false)
+      setActive(caseIndexFromUrl())
+    }
+    apply()
+    window.addEventListener('popstate', apply)
+    return () => window.removeEventListener('popstate', apply)
+  }, [])
+
+  function choose(index: number) {
+    setActive(index)
+    setAnimate(usedPointer.current)
+    usedPointer.current = false
+    const url = new URL(window.location.href)
+    url.searchParams.set('caso', lab.cases[index].id)
+    history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+  }
+
   return (
     <Section
-      id="tecnologias"
-      titleId="tech-title"
-      eyebrow="Tecnologías"
-      title="Experiencia técnica concreta"
-      intro={technologies.intro}
+      id="laboratorio"
+      titleId="lab-title"
+      eyebrow={lab.eyebrow}
+      title={lab.title}
+      intro={lab.intro}
+      layout="stack"
     >
-      <div className="tech-groups">
-        {technologies.groups.map((group) => (
-          <div className="tech-group" key={group.title}>
-            <h3>{group.title}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+      <div className="lab">
+        <fieldset
+          className="lab-options"
+          onPointerDown={() => {
+            usedPointer.current = true
+          }}
+          onKeyDown={() => {
+            usedPointer.current = false
+          }}
+        >
+          <legend className="sr-only">Caso de ejemplo</legend>
+          {lab.cases.map((item, index) => (
+            <label className="lab-option" key={item.id}>
+              <input
+                type="radio"
+                name="lab-case"
+                value={item.id}
+                checked={index === active}
+                onChange={() => choose(index)}
+              />
+              <span>{item.label}</span>
+            </label>
+          ))}
+        </fieldset>
+
+        <div aria-live="polite">
+          <div
+            key={selected.id}
+            className={animate ? 'lab-stage is-moving' : 'lab-stage'}
+          >
+            <p className="lab-lead">{selected.problem}</p>
+
+            <article className="lab-app" aria-label={`${selected.app}, ejemplo`}>
+              <header className="lab-app-bar">
+                <strong>{selected.app}</strong>
+                <span>{selected.when}</span>
+                <span className="lab-app-tag">Ejemplo</span>
+              </header>
+              <div className="lab-app-body">
+                <ul className="lab-rows">
+                  {selected.rows.map((row, index) => (
+                    <li key={row.primary} className={index === selected.open ? 'is-open' : undefined}>
+                      <span className="lab-row-time">{row.secondary}</span>
+                      <span className="lab-row-name">{row.primary}</span>
+                      <span className="lab-row-state">{row.state}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="lab-detail">
+                  <p className="lab-detail-kicker">{selected.rows[selected.open].secondary}</p>
+                  <p className="lab-detail-title">{selected.rows[selected.open].primary}</p>
+                  <p className="lab-detail-state">{selected.rows[selected.open].state}</p>
+                  <ol className="lab-trail">
+                    {selected.trail.map((step, index) => (
+                      <li
+                        key={step}
+                        className={
+                          index === selected.trailAt
+                            ? 'is-now'
+                            : index < selected.trailAt
+                              ? 'is-done'
+                              : undefined
+                        }
+                      >
+                        <span className="lab-trail-mark" aria-hidden="true" />
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            </article>
+
+            <p className="lab-outcome">{selected.outcome}</p>
           </div>
-        ))}
+        </div>
       </div>
     </Section>
   )
@@ -891,10 +911,8 @@ export default function App() {
       <main id="contenido" tabIndex={-1}>
         <Hero />
         <Services />
-        <Why />
-        <Projects />
         <Method />
-        <Technologies />
+        <Lab />
         <Contact />
       </main>
       <Footer />
