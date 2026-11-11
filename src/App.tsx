@@ -540,42 +540,50 @@ function Lab() {
             key={selected.id}
             className={animate ? 'lab-stage is-moving' : 'lab-stage'}
           >
-            <div>
-              <h3>Problema</h3>
-              <p>{selected.problem}</p>
-            </div>
+            <p className="lab-lead">{selected.problem}</p>
 
-            <div>
-              <h3>Flujo</h3>
-              <ol className="lab-flow">
-                {selected.flow.map((step, index) => (
-                  <li key={step}>
-                    <span className="num" aria-hidden="true">
-                      {twoDigits(index)}
-                    </span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
+            <article className="lab-app" aria-label={`${selected.app}, ejemplo`}>
+              <header className="lab-app-bar">
+                <strong>{selected.app}</strong>
+                <span>{selected.when}</span>
+                <span className="lab-app-tag">Ejemplo</span>
+              </header>
+              <div className="lab-app-body">
+                <ul className="lab-rows">
+                  {selected.rows.map((row, index) => (
+                    <li key={row.primary} className={index === selected.open ? 'is-open' : undefined}>
+                      <span className="lab-row-time">{row.secondary}</span>
+                      <span className="lab-row-name">{row.primary}</span>
+                      <span className="lab-row-state">{row.state}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="lab-detail">
+                  <p className="lab-detail-kicker">{selected.rows[selected.open].secondary}</p>
+                  <p className="lab-detail-title">{selected.rows[selected.open].primary}</p>
+                  <p className="lab-detail-state">{selected.rows[selected.open].state}</p>
+                  <ol className="lab-trail">
+                    {selected.trail.map((step, index) => (
+                      <li
+                        key={step}
+                        className={
+                          index === selected.trailAt
+                            ? 'is-now'
+                            : index < selected.trailAt
+                              ? 'is-done'
+                              : undefined
+                        }
+                      >
+                        <span className="lab-trail-mark" aria-hidden="true" />
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            </article>
 
-            <div className="lab-screen" aria-hidden="true">
-              <p className="lab-screen-kicker">Interfaz de ejemplo</p>
-              <p className="lab-screen-title">{selected.screenTitle}</p>
-              <ul>
-                {selected.rows.map((row) => (
-                  <li key={row.name}>
-                    <span>{row.name}</span>
-                    <span>{row.meta}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="lab-outcome">
-              <h3>Solución</h3>
-              <p>{selected.outcome}</p>
-            </div>
+            <p className="lab-outcome">{selected.outcome}</p>
           </div>
         </div>
       </div>

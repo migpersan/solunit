@@ -67,39 +67,39 @@ export const reasons = [
  * reto, qué se construyó y resultado verificable. No añadir métricas sin fuente.
  */
 export const projectsIntro = {
-  title: 'Qué hemos construido',
+  title: 'Qué construimos',
   intro:
-    'Una selección de encargos recientes: el reto, lo que construimos y lo que cambió.',
+    'Cuatro operativas de empresa. El cliente y el resultado se publican cuando se pueden contar.',
 } as const
 
 export const projects = [
   {
-    name: 'Plataforma de acompañamiento',
-    sector: 'Servicios / marketplace',
-    challenge: 'Digitalizar la relación entre clientes y profesionales con reservas y pagos.',
-    built: 'Aplicación web completa con perfiles, reservas, mensajería y cobros.',
-    result: 'Operativa centralizada y experiencia lista para escalar.',
+    name: 'Agenda y cobros',
+    sector: 'Servicios',
+    challenge: 'Clientes, huecos y pagos viven en conversaciones distintas.',
+    built: 'Una aplicación con reservas, mensajes y cobros en el mismo sitio.',
+    result: 'El día completo se ve en un solo producto.',
   },
   {
-    name: 'Portal para autónomos',
-    sector: 'Productividad empresarial',
-    challenge: 'Unificar trámites, visibilidad y herramientas en un solo entorno digital.',
-    built: 'Producto web orientado a usuarios reales, con flujos claros y backend sólido.',
-    result: 'Base tecnológica preparada para crecer por módulos.',
+    name: 'Trámites dispersos',
+    sector: 'Gestión',
+    challenge: 'La misma gestión obliga a saltar de portal en portal.',
+    built: 'Un entorno con el estado de cada trámite a la vista.',
+    result: 'Se sabe en qué punto está cada gestión, sin salir del producto.',
   },
   {
-    name: 'App de campo y captura',
+    name: 'Trabajo de campo',
     sector: 'Operaciones',
-    challenge: 'Sustituir procesos manuales por una herramienta usable en el día a día.',
-    built: 'Aplicación enfocada en velocidad de uso, datos fiables y despliegue práctico.',
-    result: 'Menos fricción operativa y mejor trazabilidad.',
+    challenge: 'Lo que ocurre fuera de la oficina se anota a mano y llega tarde.',
+    built: 'Una captura en el momento: nota, foto y ubicación.',
+    result: 'El dato nace digital y se puede seguir.',
   },
   {
-    name: 'Comercio y recambios',
-    sector: 'Retail / industrial',
-    challenge: 'Dar a la empresa una presencia digital alineada con su catálogo y ventas.',
-    built: 'Web y experiencia de producto orientada a conversión y mantenimiento sencillo.',
-    result: 'Canal digital profesional y evolucionable.',
+    name: 'Catálogo y ventas',
+    sector: 'Comercio',
+    challenge: 'La presencia digital no refleja el catálogo ni la forma de vender.',
+    built: 'Una web de producto alineada con el catálogo y fácil de mantener.',
+    result: 'Un canal digital que la empresa puede hacer evolucionar.',
   },
 ] as const
 
@@ -139,50 +139,58 @@ export const lab = {
   eyebrow: 'Ejemplo',
   title: 'Del problema al software',
   intro:
-    'Elige una operativa. Verás cómo el problema se convierte en un flujo, una interfaz de ejemplo y una solución.',
+    'Elige una operativa. La pantalla es un ejemplo: el trabajo en curso y el paso que falta.',
   cases: [
     {
       id: 'reservas',
       label: 'Reservas y cobros sueltos',
       problem:
         'Clientes, huecos y pagos viven en conversaciones distintas. Nadie ve el día completo.',
-      flow: ['Perfil', 'Reserva', 'Mensaje', 'Cobro'],
-      screenTitle: 'Agenda del día',
+      app: 'Agenda',
+      when: 'Hoy',
       rows: [
-        { name: 'Consulta inicial', meta: '09:30 · confirmada' },
-        { name: 'Seguimiento', meta: '11:00 · pendiente de pago' },
-        { name: 'Cierre', meta: '16:15 · mensaje sin leer' },
+        { primary: 'Consulta inicial', secondary: '09:30', state: 'Confirmada' },
+        { primary: 'Seguimiento', secondary: '11:00', state: 'Pendiente de pago' },
+        { primary: 'Cierre', secondary: '16:15', state: 'Mensaje sin leer' },
       ],
-      outcome:
-        'Una aplicación con perfiles, reservas, mensajería y cobros en el mismo sitio.',
+      open: 1,
+      trail: ['Perfil', 'Reserva', 'Mensaje', 'Cobro'],
+      trailAt: 3,
+      outcome: 'Reservas, mensajes y cobros quedan en el mismo producto.',
     },
     {
       id: 'tramites',
       label: 'Trámites en sitios distintos',
       problem:
         'La misma gestión obliga a saltar de portal en portal para saber en qué punto está.',
-      flow: ['Trámite', 'Estado', 'Aviso', 'Archivo'],
-      screenTitle: 'Estado de gestiones',
+      app: 'Gestiones',
+      when: 'En curso',
       rows: [
-        { name: 'Alta de actividad', meta: 'En revisión' },
-        { name: 'Modelo pendiente', meta: 'Falta un dato' },
-        { name: 'Notificación', meta: 'Recibida hoy' },
+        { primary: 'Alta de actividad', secondary: 'Este mes', state: 'En revisión' },
+        { primary: 'Modelo trimestral', secondary: 'Trimestre', state: 'Falta un dato' },
+        { primary: 'Notificación', secondary: 'Hoy', state: 'Recibida' },
       ],
-      outcome: 'Un solo entorno con el estado de cada gestión a la vista.',
+      open: 1,
+      trail: ['Trámite', 'Estado', 'Aviso', 'Archivo'],
+      trailAt: 1,
+      outcome: 'Cada gestión muestra en qué punto está, sin salir del producto.',
     },
     {
       id: 'campo',
       label: 'Parte de campo en papel',
       problem:
         'Lo que ocurre fuera de la oficina se anota a mano y llega tarde, o no llega.',
-      flow: ['Captura', 'Validación', 'Registro', 'Seguimiento'],
-      screenTitle: 'Parte de hoy',
+      app: 'Parte',
+      when: 'Visita 14',
       rows: [
-        { name: 'Revisión de equipo', meta: 'Foto y nota' },
-        { name: 'Incidencia', meta: 'Ubicación guardada' },
-        { name: 'Cierre de visita', meta: 'Pendiente de enviar' },
+        { primary: 'Revisión de equipo', secondary: 'Foto y nota', state: 'Registrada' },
+        { primary: 'Incidencia', secondary: 'Ubicación', state: 'Guardada' },
+        { primary: 'Cierre de visita', secondary: 'Sin enviar', state: 'Pendiente' },
       ],
-      outcome: 'El dato nace digital y se puede seguir desde el momento en que ocurre.',
+      open: 1,
+      trail: ['Captura', 'Validación', 'Registro', 'Seguimiento'],
+      trailAt: 2,
+      outcome: 'El dato nace en el momento y se puede seguir después.',
     },
   ],
 } as const
