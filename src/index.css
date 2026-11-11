@@ -171,6 +171,8 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
+  min-width: max-content;
 }
 
 .brand-lockup img {
@@ -184,6 +186,7 @@ textarea {
   font-size: 1rem;
   letter-spacing: 0.14em;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .nav-links {
@@ -203,8 +206,10 @@ textarea {
   color: var(--text);
 }
 
-.nav-cta {
+.btn.nav-cta {
   display: none;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn {
@@ -255,6 +260,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 44px;
   height: 44px;
   border-radius: 12px;
@@ -273,6 +279,7 @@ textarea {
 
 .mobile-nav.is-open {
   display: block;
+  background: #05070a;
 }
 
 .mobile-nav .site-shell {
@@ -680,15 +687,6 @@ textarea {
 }
 
 @media (min-width: 760px) {
-  .nav-links,
-  .nav-cta {
-    display: inline-flex;
-  }
-
-  .menu-toggle {
-    display: none;
-  }
-
   .service-row {
     grid-template-columns: minmax(16rem, 22rem) 1fr;
     align-items: baseline;
@@ -716,6 +714,15 @@ textarea {
 }
 
 @media (min-width: 980px) {
+  .nav-links,
+  .btn.nav-cta {
+    display: inline-flex;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
   .hero-grid {
     grid-template-columns: 1.15fr 0.85fr;
   }
