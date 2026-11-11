@@ -218,7 +218,8 @@ function Header({ home }: { home: boolean }) {
     }
 
     const onResize = () => {
-      if (window.matchMedia('(min-width: 980px)').matches) setOpen(false)
+      // La misma anchura en la que la cabecera muestra las secciones.
+      if (window.matchMedia('(min-width: 800px)').matches) setOpen(false)
     }
 
     window.addEventListener('keydown', onKey)
