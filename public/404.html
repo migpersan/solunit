@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05070a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="noindex" />
+    <title>Página no encontrada — Solunit</title>
+    <meta
+      name="description"
+      content="Esa dirección no está en Solunit. Vuelve al inicio o escribe para hablar del proyecto."
+    />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="128x128" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/syne-latin-v24.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/manrope-latin-v23.woff2" crossorigin />
+    <style>
+      /* Misma voz visual que la home (src/index.css). Autónomo a propósito:
+         una 404 no debe depender del CSS con hash del build. */
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-weight: 200 800;
+        font-display: swap;
+        src: url('/fonts/manrope-latin-v23.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: Syne;
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url('/fonts/syne-latin-v24.woff2') format('woff2');
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #05070a;
+        --text: #e8eef4;
+        --muted: #93a4b5;
+        --cyan: #56c1e9;
+        --cyan-deep: #3b8fb9;
+        --cyan-soft: rgba(86, 193, 233, 0.12);
+        --line: #3e6d80;
+        --font-display: Syne, Arial, sans-serif;
+        --font-body: Manrope, Arial, sans-serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text);
+        background:
+          radial-gradient(ellipse 80% 50% at 15% -10%, rgba(86, 193, 233, 0.16), transparent 55%),
+          radial-gradient(ellipse 60% 40% at 90% 8%, rgba(59, 143, 185, 0.12), transparent 50%),
+          var(--bg);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: 3px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: max(1rem, env(safe-area-inset-left));
+        top: -4rem;
+        z-index: 2;
+        padding: 0.75rem 1rem;
+        border-radius: 999px;
+        background: var(--cyan);
+        color: #041018;
+        font-weight: 700;
+      }
+
+      .skip-link:focus {
+        top: max(1rem, env(safe-area-inset-top));
+      }
+
+      .shell {
+        width: min(
+          100% - max(2rem, env(safe-area-inset-left) + env(safe-area-inset-right)),
+          1120px
+        );
+        margin-inline: auto;
+      }
+
+      .site-header {
+        padding-top: clamp(1.25rem, 4vh, 2rem);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 48px;
+        color: var(--text);
+      }
+
+      .brand img {
+        width: auto;
+        height: 40px;
+        aspect-ratio: 446 / 392;
+      }
+
+      .brand strong {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        white-space: nowrap;
+      }
+
+      .brand:hover strong {
+        color: var(--cyan);
+      }
+
+      main {
+        flex: 1;
+        padding-top: clamp(2.75rem, 10vh, 6.5rem);
+        padding-bottom: clamp(2rem, 6vh, 4rem);
+      }
+
+      .code {
+        margin: 0 0 0.85rem;
+        color: var(--cyan);
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        font-variant-numeric: tabular-nums;
+      }
+
+      h1 {
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 0 1rem;
+        font-family: var(--font-display);
+        font-size: clamp(1.85rem, 4vw, 2.6rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        text-wrap: balance;
+        scroll-margin-top: 1.5rem;
+      }
+
+      .support {
+        margin: 0 0 1.75rem;
+        max-width: 36rem;
+        color: var(--muted);
+        font-size: 1.05rem;
+        text-wrap: pretty;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0.8rem 1.25rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 650;
+        letter-spacing: 0.01em;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--cyan) 0%, var(--cyan-deep) 100%);
+        color: #041018;
+        box-shadow: 0 12px 40px rgba(86, 193, 233, 0.22);
+      }
+
+      .btn-primary:hover,
+      .btn-primary:active {
+        box-shadow: 0 16px 44px rgba(86, 193, 233, 0.3);
+      }
+
+      .btn-secondary {
+        border-color: var(--line);
+        color: var(--text);
+      }
+
+      .btn-secondary:hover,
+      .btn-secondary:active {
+        border-color: var(--cyan);
+        background: var(--cyan-soft);
+      }
+
+      .site-footer {
+        padding-bottom: clamp(1.25rem, 4vh, 2rem);
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      @media (max-width: 539px) {
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+
+      @media (max-height: 520px) {
+        .site-header {
+          padding-top: 0.75rem;
+        }
+
+        main {
+          padding-top: 1.15rem;
+          padding-bottom: 1rem;
+        }
+
+        h1 {
+          font-size: 1.55rem;
+          margin-bottom: 0.55rem;
+        }
+
+        .support {
+          margin-bottom: 1rem;
+          font-size: 1rem;
+        }
+
+        .site-footer {
+          padding-bottom: 0.75rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#titulo">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="shell">
+        <a class="brand" href="/" aria-label="Solunit inicio">
+          <img src="/mark.svg" alt="" width="446" height="392" decoding="async" />
+          <strong translate="no">SOLUNIT</strong>
+        </a>
+      </div>
+    </header>
+    <main class="shell" id="contenido">
+      <p class="code">404</p>
+      <h1 id="titulo" tabindex="-1">Esta página no existe.</h1>
+      <p class="support">
+        Esa dirección no está en el sitio. Revísala o continúa desde el inicio.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/">Volver al inicio</a>
+        <a class="btn btn-secondary" href="/#contacto">Hablemos de tu proyecto</a>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="shell">
+        <p>Soluciones Únicas Tecnológicas</p>
+      </div>
+    </footer>
+  </body>
+</html>
