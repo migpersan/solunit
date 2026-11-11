@@ -934,6 +934,24 @@ textarea {
   resize: vertical;
 }
 
+.field-error {
+  margin: 0;
+  color: #f6d2cb;
+  font-size: 0.85rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.field input[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
+  border-color: #e7a396;
+}
+
+.field input[aria-invalid='true']:focus,
+.field textarea[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px rgba(231, 163, 150, 0.28);
+}
+
 .form-note {
   margin: 0;
   color: var(--muted);
@@ -942,6 +960,10 @@ textarea {
 
 .form-status {
   color: var(--text);
+}
+
+.form-status:empty {
+  display: none;
 }
 
 .form-status a {

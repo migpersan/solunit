@@ -161,6 +161,13 @@ export const contact = {
   email: 'hola@solunit.es',
   formHint: 'Al enviar se abre tu aplicación de correo con el mensaje ya redactado.',
   formSent: 'Mensaje preparado en tu aplicación de correo. Si no se ha abierto, escríbenos a',
+  formErrors: {
+    name: 'Escribe tu nombre.',
+    email: 'Escribe un email de contacto.',
+    emailInvalid: 'Ese email no es válido. Revisa que lleve @ y el dominio.',
+    message: 'Cuéntanos qué necesitas.',
+    messageLong: 'El mensaje no cabe en un correo. Acórtalo y vuelve a enviarlo.',
+  },
 } as const
 
 export const nav = [

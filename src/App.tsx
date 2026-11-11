@@ -494,25 +494,95 @@ function Technologies() {
   )
 }
 
+type ContactField = 'name' | 'email' | 'message'
+type ContactErrors = Partial<Record<ContactField, string>>
+
+const mailtoLimit = 1800
+
+function singleLine(value: string) {
+  return value.replace(/[\r\n\t]+/g, ' ').replace(/ {2,}/g, ' ').trim()
+}
+
+function isEmailAddress(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function readContactForm(form: HTMLFormElement) {
+  const data = new FormData(form)
+  return {
+    name: singleLine(String(data.get('name') || '')),
+    company: singleLine(String(data.get('company') || '')),
+    email: singleLine(String(data.get('email') || '')),
+    message: String(data.get('message') || '').trim(),
+  }
+}
+
+function contactErrors(fields: ReturnType<typeof readContactForm>): ContactErrors {
+  const errors: ContactErrors = {}
+  if (!fields.name) errors.name = contact.formErrors.name
+  if (!fields.email) errors.email = contact.formErrors.email
+  else if (!isEmailAddress(fields.email)) errors.email = contact.formErrors.emailInvalid
+  if (!fields.message) errors.message = contact.formErrors.message
+  return errors
+}
+
+function mailtoHref(fields: ReturnType<typeof readContactForm>) {
+  const subject = encodeURIComponent(`Proyecto Solunit — ${fields.company || fields.name}`)
+  const body = encodeURIComponent(
+    `Nombre: ${fields.name}\nEmpresa: ${fields.company}\nEmail: ${fields.email}\n\n${fields.message}`,
+  )
+  return `mailto:${contact.email}?subject=${subject}&body=${body}`
+}
+
 function Contact() {
+  const [errors, setErrors] = useState<ContactErrors>({})
+  const [submitted, setSubmitted] = useState(false)
   const [sent, setSent] = useState(false)
+  const focusField = useRef<ContactField | null>(null)
+
+  useEffect(() => {
+    const field = focusField.current
+    if (!field) return
+    focusField.current = null
+    document.getElementById(field)?.focus()
+  }, [errors])
+
+  useEffect(() => {
+    if (!sent) return
+    document.getElementById('contact-form-status')?.scrollIntoView({ block: 'nearest' })
+  }, [sent])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const form = event.currentTarget
-    const data = new FormData(form)
-    const name = String(data.get('name') || '').trim()
-    const company = String(data.get('company') || '').trim()
-    const email = String(data.get('email') || '').trim()
-    const message = String(data.get('message') || '').trim()
+    const fields = readContactForm(event.currentTarget)
+    const next = contactErrors(fields)
+    if (Object.keys(next).length === 0 && mailtoHref(fields).length > mailtoLimit) {
+      next.message = contact.formErrors.messageLong
+    }
 
-    const subject = encodeURIComponent(`Proyecto Solunit — ${company || name}`)
-    const body = encodeURIComponent(
-      `Nombre: ${name}\nEmpresa: ${company}\nEmail: ${email}\n\n${message}`,
-    )
+    setSubmitted(true)
+    setErrors(next)
 
-    window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`
+    const firstInvalid = (['name', 'email', 'message'] as const).find((field) => next[field])
+    if (firstInvalid) {
+      focusField.current = firstInvalid
+      setSent(false)
+      return
+    }
+
+    window.location.href = mailtoHref(fields)
     setSent(true)
+  }
+
+  function onInput(event: FormEvent<HTMLFormElement>) {
+    if (sent) setSent(false)
+    if (!submitted) return
+    const fields = readContactForm(event.currentTarget)
+    const next = contactErrors(fields)
+    if (Object.keys(next).length === 0 && mailtoHref(fields).length > mailtoLimit) {
+      next.message = contact.formErrors.messageLong
+    }
+    setErrors(next)
   }
 
   return (
@@ -533,17 +603,43 @@ function Contact() {
             </a>
           </div>
 
-          <form className="contact-form" onSubmit={onSubmit}>
+          <form
+            className="contact-form"
+            action={`mailto:${contact.email}`}
+            method="post"
+            encType="text/plain"
+            noValidate
+            onSubmit={onSubmit}
+            onInput={onInput}
+          >
             <div className="field-row">
               <div className="field">
                 <label htmlFor="name">Nombre</label>
-                <input id="name" name="name" autoComplete="name" required />
+                <input
+                  id="name"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={120}
+                  aria-invalid={errors.name ? true : undefined}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                />
+                {errors.name ? (
+                  <p className="field-error" id="name-error">
+                    {errors.name}
+                  </p>
+                ) : null}
               </div>
               <div className="field">
                 <label htmlFor="company">
                   Empresa <span className="optional">(opcional)</span>
                 </label>
-                <input id="company" name="company" autoComplete="organization" />
+                <input
+                  id="company"
+                  name="company"
+                  autoComplete="organization"
+                  maxLength={160}
+                />
               </div>
             </div>
             <div className="field">
@@ -552,13 +648,38 @@ function Contact() {
                 id="email"
                 name="email"
                 type="email"
+                inputMode="email"
                 autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 required
+                maxLength={254}
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={errors.email ? 'email-error' : undefined}
               />
+              {errors.email ? (
+                <p className="field-error" id="email-error">
+                  {errors.email}
+                </p>
+              ) : null}
             </div>
             <div className="field">
               <label htmlFor="message">Qué necesitas</label>
-              <textarea id="message" name="message" required />
+              <textarea
+                id="message"
+                name="message"
+                required
+                maxLength={2000}
+                enterKeyHint="send"
+                aria-invalid={errors.message ? true : undefined}
+                aria-describedby={errors.message ? 'message-error' : undefined}
+              />
+              {errors.message ? (
+                <p className="field-error" id="message-error">
+                  {errors.message}
+                </p>
+              ) : null}
             </div>
             <button
               className="btn btn-primary"
@@ -570,12 +691,14 @@ function Contact() {
             <p className="form-note" id="contact-form-hint">
               {contact.formHint}
             </p>
-            {sent ? (
-              <p className="form-note form-status" role="status">
-                {contact.formSent}{' '}
-                <a href={`mailto:${contact.email}`}>{contact.email}</a>.
-              </p>
-            ) : null}
+            <p className="form-note form-status" id="contact-form-status" role="status">
+              {sent ? (
+                <>
+                  {contact.formSent}{' '}
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+                </>
+              ) : null}
+            </p>
           </form>
         </div>
       </div>
