@@ -1036,6 +1036,12 @@ textarea {
     font-size: 2.05rem;
   }
 
+  /* 0.18em parte el lema («TECNOLÓGICAS» queda solo) y come
+     los 20px que mantienen el segundo CTA dentro de la pantalla. */
+  .hero-brand .tagline {
+    letter-spacing: 0.08em;
+  }
+
   .hero h1 {
     font-size: 1.58rem;
     margin-bottom: 0.7rem;
