@@ -57,10 +57,10 @@ function Header() {
       <div className="site-shell inner">
         <a className="brand-lockup" href="#top" aria-label="Solunit inicio">
           <img
-            src="/logo.png"
+            src="/mark.png"
             alt=""
-            width={42}
-            height={42}
+            width={446}
+            height={392}
             decoding="async"
           />
           <strong>{brand.name}</strong>
@@ -134,10 +134,10 @@ function Hero() {
 
         <div className="hero-visual" aria-hidden="true">
           <img
-            src="/logo.png"
+            src="/mark.png"
             alt=""
-            width={280}
-            height={280}
+            width={446}
+            height={392}
             decoding="async"
             fetchPriority="high"
           />
