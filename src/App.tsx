@@ -35,7 +35,7 @@ function Header() {
       <div className="site-shell inner">
         <a className="brand-lockup" href="#top" aria-label="Solunit inicio">
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt=""
             width={42}
             height={42}
@@ -111,7 +111,7 @@ function Hero() {
 
         <div className="hero-visual" aria-hidden="true">
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt=""
             width={280}
             height={280}
