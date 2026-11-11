@@ -26,6 +26,10 @@ Vercel está conectado al repo `migpersan/solunit`. Cada merge a `main` crea un 
 
 Si el dominio sirve un build antiguo (Google Fonts, `#root` vacío, sin `data-prerendered`), el tip de `main` no se ha desplegado: hace falta un nuevo push a `main` o un Redeploy en Vercel.
 
+## Apps
+
+- **Pira** (`apps/pira`): MVP de gestión de recambios y facturas (estilo Gira). Ver `apps/pira/README.md`. Arranque: `cd apps/pira && pnpm install && pnpm dev` → http://localhost:5174
+
 ## Pendiente (revisión humana)
 
 - Casos de proyecto reales y métricas verificables
