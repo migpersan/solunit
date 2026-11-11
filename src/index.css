@@ -788,6 +788,9 @@ textarea {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: var(--bg-panel);
+  /* El documento ya reserva la cabecera. Este margen deja sitio
+     a la opción recién elegida, que queda justo encima. */
+  scroll-margin-top: calc(var(--header) + 0.75rem);
 }
 
 .lab-stage.is-moving {

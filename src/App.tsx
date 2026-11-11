@@ -525,9 +525,13 @@ function Lab() {
   const [active, setActive] = useState(0)
   const [animate, setAnimate] = useState(false)
   const usedPointer = useRef(false)
+  const scrollStage = useRef(false)
+  const stageRef = useRef<HTMLDivElement>(null)
   const selected = lab.cases[active] ?? lab.cases[0]
 
-  useEffect(() => {
+  // Antes del primer pintado: un enlace ?caso= no debe mostrar
+  // el ejemplo por defecto y luego saltar al elegido.
+  useLayoutEffect(() => {
     const apply = () => {
       setAnimate(false)
       setActive(caseIndexFromUrl())
@@ -537,10 +541,39 @@ function Lab() {
     return () => window.removeEventListener('popstate', apply)
   }, [])
 
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
+    stage.classList.remove('is-moving')
+    if (!animate) return
+    const frame = window.requestAnimationFrame(() => {
+      stage.classList.add('is-moving')
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [animate, selected.id])
+
+  useEffect(() => {
+    if (!scrollStage.current) return
+    scrollStage.current = false
+    const stage = stageRef.current
+    if (!stage) return
+    // En el móvil las opciones quedan arriba. Si el ejemplo está
+    // fuera, el toque parece no hacer nada. Con teclado no se mueve:
+    // el foco sigue en la opción y un salto lo dejaría fuera.
+    const header = document.querySelector('.site-header')
+    const topLimit = header instanceof HTMLElement ? header.offsetHeight : 0
+    const rect = stage.getBoundingClientRect()
+    const visible = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, topLimit)
+    if (visible >= 160) return
+    stage.scrollIntoView({ block: 'start' })
+  }, [active])
+
   function choose(index: number) {
-    setActive(index)
-    setAnimate(usedPointer.current)
+    const pointer = usedPointer.current
     usedPointer.current = false
+    scrollStage.current = pointer
+    setAnimate(pointer)
+    setActive(index)
     const url = new URL(window.location.href)
     url.searchParams.set('caso', lab.cases[index].id)
     history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
@@ -580,56 +613,63 @@ function Lab() {
           ))}
         </fieldset>
 
-        <div aria-live="polite">
-          <div
-            key={selected.id}
-            className={animate ? 'lab-stage is-moving' : 'lab-stage'}
-          >
-            <p className="lab-lead">{selected.problem}</p>
+        <div ref={stageRef} className="lab-stage">
+          <p className="lab-lead" aria-live="polite">
+            {selected.problem}
+          </p>
 
-            <article className="lab-app" aria-label={`${selected.app}, ejemplo`}>
-              <header className="lab-app-bar">
-                <strong>{selected.app}</strong>
-                <span>{selected.when}</span>
-                <span className="lab-app-tag">Ejemplo</span>
-              </header>
-              <div className="lab-app-body">
-                <ul className="lab-rows">
-                  {selected.rows.map((row, index) => (
-                    <li key={row.primary} className={index === selected.open ? 'is-open' : undefined}>
-                      <span className="lab-row-time">{row.secondary}</span>
-                      <span className="lab-row-name">{row.primary}</span>
-                      <span className="lab-row-state">{row.state}</span>
+          <article className="lab-app" aria-label={`${selected.app}, ejemplo`}>
+            <header className="lab-app-bar">
+              <strong>{selected.app}</strong>
+              <span>{selected.when}</span>
+              <span className="lab-app-tag">Ejemplo</span>
+            </header>
+            <div className="lab-app-body">
+              <ul className="lab-rows">
+                {selected.rows.map((row, index) => (
+                  <li key={row.primary} className={index === selected.open ? 'is-open' : undefined}>
+                    {index === selected.open ? <span className="sr-only">En curso: </span> : null}
+                    <span className="lab-row-name">{row.primary}</span>
+                    <span className="lab-row-time">{row.secondary}</span>
+                    <span className="lab-row-state">{row.state}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="lab-detail">
+                <p className="lab-detail-kicker">{selected.rows[selected.open].secondary}</p>
+                <p className="lab-detail-title">{selected.rows[selected.open].primary}</p>
+                <p className="lab-detail-state">{selected.rows[selected.open].state}</p>
+                <ol className="lab-trail" aria-label="Pasos del ejemplo">
+                  {selected.trail.map((step, index) => (
+                    <li
+                      key={step}
+                      className={
+                        index === selected.trailAt
+                          ? 'is-now'
+                          : index < selected.trailAt
+                            ? 'is-done'
+                            : undefined
+                      }
+                    >
+                      <span className="sr-only">
+                        {index < selected.trailAt
+                          ? 'Hecho: '
+                          : index === selected.trailAt
+                            ? 'En curso: '
+                            : 'Pendiente: '}
+                      </span>
+                      <span className="lab-trail-mark" aria-hidden="true" />
+                      {step}
                     </li>
                   ))}
-                </ul>
-                <div className="lab-detail">
-                  <p className="lab-detail-kicker">{selected.rows[selected.open].secondary}</p>
-                  <p className="lab-detail-title">{selected.rows[selected.open].primary}</p>
-                  <p className="lab-detail-state">{selected.rows[selected.open].state}</p>
-                  <ol className="lab-trail">
-                    {selected.trail.map((step, index) => (
-                      <li
-                        key={step}
-                        className={
-                          index === selected.trailAt
-                            ? 'is-now'
-                            : index < selected.trailAt
-                              ? 'is-done'
-                              : undefined
-                        }
-                      >
-                        <span className="lab-trail-mark" aria-hidden="true" />
-                        {step}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+                </ol>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <p className="lab-outcome">{selected.outcome}</p>
-          </div>
+          <p className="lab-outcome" aria-live="polite">
+            {selected.outcome}
+          </p>
         </div>
       </div>
     </Section>
