@@ -150,7 +150,6 @@ export const contact = {
   support:
     'Una conversación para entender el reto y ver si encajamos. Sin compromiso y con claridad desde el primer momento.',
   email: 'hola@solunit.es',
-  note: 'Sustituye el email cuando tengas dominio y buzón definitivos.',
 } as const
 
 export const nav = [

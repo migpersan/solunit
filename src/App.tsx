@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
   brand,
@@ -15,6 +15,7 @@ import {
 function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const toggleRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -27,6 +28,27 @@ function Header() {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      setOpen(false)
+      toggleRef.current?.focus()
+    }
+
+    const onResize = () => {
+      if (window.matchMedia('(min-width: 980px)').matches) setOpen(false)
+    }
+
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
     }
   }, [open])
 
@@ -57,6 +79,7 @@ function Header() {
         </a>
 
         <button
+          ref={toggleRef}
           className="menu-toggle"
           type="button"
           aria-expanded={open}
@@ -302,9 +325,6 @@ function Contact() {
             <a className="email" href={`mailto:${contact.email}`}>
               {contact.email}
             </a>
-            <p className="form-note" style={{ marginTop: '1rem' }}>
-              {contact.note}
-            </p>
           </div>
 
           <form className="contact-form" onSubmit={onSubmit}>
@@ -334,7 +354,7 @@ function Contact() {
               Enviar mensaje
             </button>
             {sent ? (
-              <p className="form-note">
+              <p className="form-note" role="status">
                 Se abrirá tu cliente de correo para completar el envío.
               </p>
             ) : null}
