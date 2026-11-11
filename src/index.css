@@ -982,25 +982,52 @@ textarea {
   font-size: 0.88rem;
 }
 
+/* Tres estados del mismo tamaño: anillo visible (pendiente),
+   anillo cian (en curso) y disco cian (hecho). El cian al 28%
+   no llegaba a 3:1 y hecho y en curso eran el mismo disco. */
 .lab-trail-mark {
-  width: 0.45rem;
-  height: 0.45rem;
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  border: 2px solid var(--line-control);
   border-radius: 50%;
-  background: var(--line-strong);
+  background: transparent;
 }
 
 .lab-trail li.is-done {
   color: var(--text);
 }
 
-.lab-trail li.is-done .lab-trail-mark,
-.lab-trail li.is-now .lab-trail-mark {
+.lab-trail li.is-done .lab-trail-mark {
+  border-color: var(--cyan);
   background: var(--cyan);
 }
 
 .lab-trail li.is-now {
   color: var(--text);
   font-weight: 700;
+}
+
+.lab-trail li.is-now .lab-trail-mark {
+  border-color: var(--cyan);
+  background: transparent;
+}
+
+@media (forced-colors: active) {
+  .lab-trail-mark {
+    border-color: ButtonText;
+    background: transparent;
+  }
+
+  .lab-trail li.is-done .lab-trail-mark {
+    background: ButtonText;
+    border-color: ButtonText;
+  }
+
+  .lab-trail li.is-now .lab-trail-mark {
+    border-color: Highlight;
+    background: transparent;
+  }
 }
 
 @media (min-width: 800px) {
