@@ -176,9 +176,9 @@ textarea {
 }
 
 .brand-lockup img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
+  width: auto;
+  height: 40px;
+  aspect-ratio: 446 / 392;
 }
 
 .brand-lockup strong {
@@ -313,6 +313,7 @@ textarea {
 
 .hero-copy {
   max-width: 40rem;
+  min-width: 0;
 }
 
 .hero-brand {
@@ -390,7 +391,9 @@ textarea {
 .hero-visual img {
   position: relative;
   z-index: 1;
-  width: min(72%, 280px);
+  width: min(86%, 360px);
+  height: auto;
+  aspect-ratio: 446 / 392;
   filter: drop-shadow(0 20px 50px rgba(86, 193, 233, 0.25));
   animation: float-logo 7s ease-in-out infinite;
 }
