@@ -1100,9 +1100,36 @@ textarea {
   }
 
   .hero-actions {
+    gap: 0.6rem;
+  }
+}
+
+/* Hasta 479px los dos CTA ya no caben en fila. Antes solo el estrecho
+   los estiraba y el secundario quedaba más corto. Misma altura de
+   48px; el texto no cambia. Desde 480px vuelven a ir en línea. */
+@media (max-width: 479px) {
+  .hero-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.6rem;
+  }
+}
+
+/* En columna el símbolo a 420px no cabe bajo los CTA: en 390×844 se ve
+   cortado y Servicios empieza más abajo. Con 800–960px de alto cabe
+   entero, a 9.5rem y alineado al texto. Por debajo de 800px no hay
+   sitio para el símbolo completo y se omite: un recorte parece un
+   fallo. El lema escrito sigue. En tablet alta (p. ej. 768×1024) y
+   desde 980px el símbolo grande permanece. */
+@media (max-width: 979px) and (max-height: 799px) {
+  .hero-visual {
+    display: none;
+  }
+}
+
+@media (max-width: 979px) and (min-height: 800px) and (max-height: 960px) {
+  .hero-visual {
+    justify-self: start;
+    width: 9.5rem;
   }
 }
 
