@@ -81,7 +81,25 @@ function useHashOnLoad() {
       if (target && event.target === target) place(false)
     }
 
-    const onNavigate = () => place(false)
+    // Atrás y adelante restauran el scroll solos. El foco hay que moverlo
+    // aquí: si se queda en el destino, el siguiente tecleo vuelve a bajar.
+    const onNavigate = () => {
+      window.setTimeout(() => {
+        const hash = decodeURIComponent(window.location.hash.slice(1))
+        if (!hash) {
+          const hero = document.getElementById('hero-title')
+          if (hero && document.activeElement !== hero) {
+            hero.focus({ preventScroll: true })
+          }
+          return
+        }
+
+        const target = document.getElementById(hash)
+        if (!target) return
+        const heading = headingIn(target) ?? target
+        if (document.activeElement !== heading) heading.focus({ preventScroll: true })
+      }, 0)
+    }
 
     place(true)
     document.addEventListener('focusin', onFocusIn)
@@ -154,10 +172,12 @@ function followAnchor(event: MouseEvent<HTMLAnchorElement>, href: string) {
   const main = document.getElementById('contenido')
   if (main) main.inert = false
   document.body.style.overflow = ''
+  // El historial guarda la posición de este momento. Si se desplaza antes,
+  // Atrás se queda en el destino y no recupera el punto de partida.
+  if (decodeURIComponent(window.location.hash) !== href) history.pushState(null, '', href)
   const heading = headingIn(target)
   ;(heading ?? target).focus({ preventScroll: true })
   target.scrollIntoView()
-  if (window.location.hash !== href) history.pushState(null, '', href)
 }
 
 function revealInMenu(item: HTMLElement, menu: HTMLElement) {
