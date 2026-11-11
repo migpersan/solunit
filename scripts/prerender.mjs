@@ -143,6 +143,11 @@ try {
       if (!html.includes(owner.email) || !html.includes('/aviso-legal') || !html.includes('/privacidad')) {
         throw new Error('El prerender de la home no incluye el contacto ni las páginas legales.')
       }
+      // Servicios, método, ejemplo y contacto tienen que estar en el HTML a plena tinta.
+      // Ocultarlos hasta hacer scroll deja el foco y la búsqueda sobre texto invisible.
+      if (html.includes('data-reveal') || html.includes('reveal-ready')) {
+        throw new Error('La home no debe ocultar secciones hasta que entren en pantalla.')
+      }
     } else {
       if (html.includes('id="hero-title"')) {
         throw new Error(`La página ${output.id} ha prerenderizado la home.`)

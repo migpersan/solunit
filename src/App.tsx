@@ -117,43 +117,6 @@ function useHashOnLoad() {
   }, [])
 }
 
-function useReveal() {
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    const root = document.documentElement
-    const items = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-
-    // Lo que ya está en pantalla (o por encima) no debe parpadear al activar el efecto.
-    for (const item of items) {
-      if (item.getBoundingClientRect().top < window.innerHeight) {
-        item.classList.add('is-visible')
-      }
-    }
-    root.classList.add('reveal-ready')
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue
-          entry.target.classList.add('is-visible')
-          observer.unobserve(entry.target)
-        }
-      },
-      // El margen superior cuenta como visible todo lo que queda por encima:
-      // un salto de ancla no deja bloques ocultos a medio camino.
-      { rootMargin: '100000px 0px -8% 0px' },
-    )
-
-    items.forEach((item) => observer.observe(item))
-    return () => {
-      observer.disconnect()
-      root.classList.remove('reveal-ready')
-    }
-  }, [])
-}
-
 const navIds = nav.map((item) => item.href.slice(1))
 
 function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -461,14 +424,14 @@ function Section({
       tabIndex={-1}
     >
       <div className="site-shell section-grid">
-        <div className="section-heading" data-reveal>
+          <div className="section-heading">
           <p className="eyebrow">{eyebrow}</p>
           <h2 id={titleId} tabIndex={-1}>
             {title}
           </h2>
           {intro ? <p className="intro">{intro}</p> : null}
         </div>
-        <div className="section-body" data-reveal>
+        <div className="section-body">
           {children}
         </div>
       </div>
@@ -792,7 +755,7 @@ function Contact() {
       tabIndex={-1}
     >
       <div className="site-shell">
-        <div className="contact-panel" data-reveal>
+          <div className="contact-panel">
           <div className="contact-copy">
             <p className="eyebrow">Contacto</p>
             <h2 id="contact-title" tabIndex={-1}>
@@ -991,7 +954,6 @@ export default function App({ page = 'home' }: { page?: PageId }) {
   const home = page === 'home'
   usePageMeta(page)
   useHashOnLoad()
-  useReveal()
 
   return (
     <>
