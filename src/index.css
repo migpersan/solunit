@@ -1353,17 +1353,15 @@ textarea {
   }
 }
 
-/* Portátil ancho y bajo (p. ej. 1280×720). El titular ocupa cuatro
-   líneas y el índice de servicios cae bajo el pliegue: se ve la línea,
-   no el nombre. Se recorta el aire; las palabras del hero no cambian.
-   Desde 768px de alto el índice ya cabe y se mantiene el ritmo. */
+/* Escritorio bajo (p. ej. 1280×720). El índice de servicios que
+   obligaba a encoger el titular ya no está: se mantiene la escala
+   y solo se recorta el aire para que los dos CTA sigan en pantalla.
+   El texto del hero no cambia. Desde 761px de alto vuelve el ritmo
+   completo. */
 @media (min-width: 980px) and (max-height: 760px) {
   .hero {
     padding-top: 1.25rem;
-  }
-
-  .hero-grid {
-    padding-bottom: 1.15rem;
+    padding-bottom: 1.5rem;
   }
 
   .hero-brand {
@@ -1379,11 +1377,17 @@ textarea {
   }
 }
 
-/* Por debajo de 680px el aire ya no alcanza. El titular baja un punto
-   para que el índice siga en el primer pantallazo. El texto es el mismo. */
-@media (min-width: 980px) and (max-height: 680px) {
+/* Por debajo de 600px el titular a tamaño completo ocupa cuatro
+   líneas y empuja los CTA. Baja a 2.6rem (tres líneas), por encima
+   del 2.15rem que pedía el índice ya eliminado. */
+@media (min-width: 980px) and (max-height: 600px) {
+  .hero {
+    padding-top: 0.85rem;
+    padding-bottom: 1rem;
+  }
+
   .hero h1 {
-    font-size: 2.15rem;
+    font-size: 2.6rem;
   }
 }
 
