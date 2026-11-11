@@ -505,7 +505,6 @@ function Method() {
       eyebrow="Método"
       title="Nuestra forma de trabajar"
       intro="El orden del trabajo, de la primera conversación al mantenimiento."
-      layout="stack"
     >
       <ol className="method-list">
         {method.map((item) => (

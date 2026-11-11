@@ -1504,29 +1504,6 @@ textarea {
     gap: 3.25rem;
   }
 
-  .method-list {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 2rem;
-  }
-
-  .method-item {
-    display: block;
-    padding-bottom: 0;
-  }
-
-  .method-item:not(:last-child)::after {
-    left: 2.5rem;
-    right: -2rem;
-    top: 1.25rem;
-    bottom: auto;
-    width: auto;
-    height: 1px;
-  }
-
-  .method-item h3 {
-    margin-top: 1.25rem;
-  }
-
   .footer-top {
     grid-template-columns: 1fr auto auto;
     gap: 3rem;
