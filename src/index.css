@@ -1085,6 +1085,11 @@ textarea {
 .contact-form {
   display: grid;
   gap: 0.9rem;
+  /* El ancho que importa es el del formulario. Una media query
+     de ventana, al partir el panel, dejaba Nombre y Empresa
+     en la mitad de una columna ya estrecha. */
+  container: contact / inline-size;
+  min-width: 0;
 }
 
 .field-row {
@@ -1463,7 +1468,10 @@ textarea {
   }
 }
 
-@media (min-width: 560px) {
+/* Dos columnas solo si cada campo conserva el ancho que ya
+   tenía en el móvil ancho (~230px). Por debajo van uno bajo
+   el otro: en 760px la fila se quedaba en 153px. */
+@container contact (min-width: 29rem) {
   .field-row {
     grid-template-columns: 1fr 1fr;
   }
