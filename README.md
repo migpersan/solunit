@@ -18,9 +18,16 @@ pnpm preview
 
 El copy vive en `src/data/content.ts`. Las reglas de marca para agentes están en `AGENTS.md`.
 
+## Despliegue
+
+Producción: [solunit.es](https://solunit.es).
+
+Vercel está conectado al repo `migpersan/solunit`. Cada merge a `main` crea un deployment de Production. Framework: Vite. Build: `pnpm build`. Output: `dist`.
+
+Si el dominio sirve un build antiguo (Google Fonts, `#root` vacío, sin `data-prerendered`), el tip de `main` no se ha desplegado: hace falta un nuevo push a `main` o un Redeploy en Vercel.
+
 ## Pendiente (revisión humana)
 
-- Dominio y email definitivos
-- Casos de proyecto reales y métricas
-- Despliegue (Vercel) + DNS
-- Canal Telegram para avisos del ciclo 24h
+- Casos de proyecto reales y métricas verificables
+- Verificar que `hola@solunit.es` recibe correo
+- Formulario de contacto con envío real (sin mailto)
