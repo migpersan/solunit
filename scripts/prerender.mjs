@@ -104,7 +104,7 @@ function pageHtml(appHtml) {
 
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-  const { pageMeta, pageJsonLd } = await vite.ssrLoadModule('/src/data/pages.ts')
+  const { pageMeta, pageJsonLd, pageHeading } = await vite.ssrLoadModule('/src/data/pages.ts')
   const { owner } = await vite.ssrLoadModule('/src/data/legal.ts')
   const { hero, services } = await vite.ssrLoadModule('/src/data/content.ts')
 
@@ -185,6 +185,9 @@ try {
       if (!html.includes(`"description": ${JSON.stringify(meta.description)}`)) {
         throw new Error('La descripción del JSON-LD de la home no coincide con la ficha.')
       }
+      if (webpage.dateModified || node('BreadcrumbList')) {
+        throw new Error('La home no es un documento fechado y no lleva migas.')
+      }
       if (!html.includes(owner.email) || !html.includes('/aviso-legal') || !html.includes('/privacidad')) {
         throw new Error('El prerender de la home no incluye el contacto ni las páginas legales.')
       }
@@ -233,11 +236,41 @@ try {
       if (!html.includes(`content="${meta.description}"`)) {
         throw new Error(`La ficha de ${output.id} no llega a la descripción.`)
       }
+      if (webpage.dateModified !== owner.updated) {
+        throw new Error(`La página ${output.id} no declara la fecha de actualización.`)
+      }
+      const crumbNames = (node('BreadcrumbList')?.itemListElement ?? []).map((item) => item.name)
+      if (crumbNames[0] !== 'Inicio' || crumbNames[1] !== pageHeading[output.id]) {
+        throw new Error(`Las migas de ${output.id} no coinciden con la ruta visible.`)
+      }
+      // React SSR escribe dateTime. En HTML el nombre es insensible a mayúsculas
+      // y un analizador lo lee como datetime.
+      const visibleMarks = [
+        html.includes('aria-label="Ruta"'),
+        html.includes('aria-current="page"'),
+        new RegExp(`<h1\\b[^>]*>\\s*${pageHeading[output.id]}\\s*</h1>`).test(html),
+        html.includes(`dateTime="${owner.updated}"`),
+        html.includes(`>${owner.updatedLabel}<`),
+      ]
+      if (visibleMarks.some((ok) => !ok)) {
+        throw new Error(`La ruta o la fecha visible de ${output.id} no coinciden con el marcado.`)
+      }
     }
 
     await mkdir(path.dirname(output.file), { recursive: true })
     await writeFile(output.file, html)
     console.log(`Prerender: ${output.file} (${html.length} bytes)`)
+  }
+
+  const sitemapFile = path.join(path.dirname(indexFile), 'sitemap.xml')
+  const sitemap = await readFile(sitemapFile, 'utf8')
+  const dated = [`aviso-legal`, `privacidad`]
+  for (const id of dated) {
+    const loc = pageMeta[id].canonical
+    const block = sitemap.split('<url>').find((part) => part.includes(`<loc>${loc}</loc>`))
+    if (!block || !block.includes(`<lastmod>${owner.updated}</lastmod>`)) {
+      throw new Error(`El sitemap no fecha ${loc} con la actualización del documento.`)
+    }
   }
 } finally {
   await vite.close()

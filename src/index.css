@@ -1438,6 +1438,52 @@ textarea {
   max-width: 42rem;
 }
 
+/* Ruta del documento. Sustituye al rótulo «Solunit»: la marca ya está
+   en la cabecera y aquí hace falta volver al inicio. El enlace mide
+   44px; la página actual no es un enlace. */
+.legal-crumb {
+  margin: 0 0 0.15rem;
+  break-after: avoid;
+}
+
+.legal-crumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.legal-crumb li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.legal-crumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
+}
+
+.legal-crumb a:hover {
+  color: var(--text);
+}
+
+.legal-crumb [aria-current='page'] {
+  color: var(--text);
+}
+
+.legal-crumb-sep {
+  color: var(--muted);
+}
+
 .legal-page h1 {
   margin: 0 0 1rem;
   font-family: var(--font-display);
@@ -1961,7 +2007,8 @@ textarea {
   .site-footer .email,
   .footer-nav a,
   .footer-legal-nav a,
-  .legal-facts a {
+  .legal-facts a,
+  .legal-crumb a {
     min-height: 0;
   }
 

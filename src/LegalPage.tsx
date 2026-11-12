@@ -1,5 +1,5 @@
 import { owner } from './data/legal'
-import type { PageId } from './data/pages'
+import { pageHeading, type PageId } from './data/pages'
 
 function Mail() {
   return <a href={`mailto:${owner.email}`}>{owner.email}</a>
@@ -44,12 +44,19 @@ function Identity() {
   )
 }
 
+function Updated() {
+  return (
+    <p className="legal-updated">
+      Última actualización: <time dateTime={owner.updated}>{owner.updatedLabel}</time>.
+    </p>
+  )
+}
+
 function AvisoLegal() {
   return (
     <>
-      <p className="eyebrow">Solunit</p>
       <h1 id="legal-title" tabIndex={-1}>
-        Aviso legal
+        {pageHeading['aviso-legal']}
       </h1>
       <p className="legal-lead">
         Datos del titular de este sitio, conforme a la Ley 34/2002 de servicios de la sociedad de
@@ -116,7 +123,7 @@ function AvisoLegal() {
         </p>
       </section>
 
-      <p className="legal-updated">Última actualización: {owner.updatedLabel}.</p>
+      <Updated />
     </>
   )
 }
@@ -124,9 +131,8 @@ function AvisoLegal() {
 function Privacidad() {
   return (
     <>
-      <p className="eyebrow">Solunit</p>
       <h1 id="legal-title" tabIndex={-1}>
-        Privacidad
+        {pageHeading.privacidad}
       </h1>
       <p className="legal-lead">
         Qué datos se tratan al usar este sitio, para qué y cómo ejercer tus derechos. Reglamento
@@ -239,15 +245,36 @@ function Privacidad() {
         </p>
       </section>
 
-      <p className="legal-updated">Última actualización: {owner.updatedLabel}.</p>
+      <Updated />
     </>
+  )
+}
+
+function Crumb({ page }: { page: Extract<PageId, 'aviso-legal' | 'privacidad'> }) {
+  return (
+    <nav className="legal-crumb" aria-label="Ruta">
+      <ol>
+        <li>
+          <a href="/">Inicio</a>
+          <span className="legal-crumb-sep" aria-hidden="true">
+            /
+          </span>
+        </li>
+        <li>
+          <span aria-current="page">{pageHeading[page]}</span>
+        </li>
+      </ol>
+    </nav>
   )
 }
 
 export default function LegalPage({ page }: { page: Extract<PageId, 'aviso-legal' | 'privacidad'> }) {
   return (
     <article className="legal-page site-shell" aria-labelledby="legal-title">
-      <div className="legal-wrap">{page === 'aviso-legal' ? <AvisoLegal /> : <Privacidad />}</div>
+      <div className="legal-wrap">
+        <Crumb page={page} />
+        {page === 'aviso-legal' ? <AvisoLegal /> : <Privacidad />}
+      </div>
     </article>
   )
 }

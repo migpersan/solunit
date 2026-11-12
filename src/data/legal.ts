@@ -9,6 +9,8 @@ export const owner = {
   site: 'https://solunit.es/',
   sign: 'Solunit',
   signLong: 'Soluciones Únicas Tecnológicas',
+  /** Misma fecha que `updatedLabel`, en forma que puede leer un buscador. */
+  updated: '2026-11-11',
   updatedLabel: '11 de noviembre de 2026',
 } as const
 
