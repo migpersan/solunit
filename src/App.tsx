@@ -7,13 +7,12 @@ import {
   lab,
   method,
   nav,
+  serviceDomId,
   services,
 } from './data/content'
 import { owner } from './data/legal'
 import { pageMeta, type PageId } from './data/pages'
 import LegalPage from './LegalPage'
-
-const serviceId = (index: number) => `servicio-${index + 1}`
 
 // Mismo trazo que public/mark.svg, que la 404 sigue pidiendo.
 // En la página va dentro del HTML: la cabecera no espera otra petición.
@@ -461,7 +460,7 @@ function Services() {
     >
       <ul className="services-list">
         {services.map((service, index) => (
-          <li className="service-row" id={serviceId(index)} key={service.title}>
+          <li className="service-row" id={serviceDomId(index)} key={service.title}>
             <h3 tabIndex={-1}>{service.title}</h3>
             <p>{service.description}</p>
           </li>

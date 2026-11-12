@@ -12,16 +12,33 @@ export const owner = {
   updatedLabel: '11 de noviembre de 2026',
 } as const
 
-/** Datos públicos de la organización. El documento de identidad queda en el aviso legal. */
-export function organizationJsonLd() {
+export const organizationId = `${owner.site}#organizacion`
+export const websiteId = `${owner.site}#sitio`
+
+/**
+ * Datos públicos de la organización. El documento de identidad queda en el aviso legal.
+ * El nodo no lleva @context: lo pone el grafo de la página.
+ */
+export function organizationNode() {
   return {
-    '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': organizationId,
     name: owner.sign,
     alternateName: owner.signLong,
     url: owner.site,
-    logo: `${owner.site}logo.png`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${owner.site}logo.png`,
+      width: 446,
+      height: 512,
+    },
     email: owner.email,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'proyectos',
+      email: owner.email,
+      availableLanguage: 'es',
+    },
     description: hero.support,
     address: {
       '@type': 'PostalAddress',

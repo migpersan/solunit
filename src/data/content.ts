@@ -39,6 +39,11 @@ export const services = [
   },
 ] as const
 
+/** Id de cada fila de servicios. El JSON-LD enlaza el mismo ancla. */
+export function serviceDomId(index: number) {
+  return `servicio-${index + 1}`
+}
+
 export const method = [
   {
     step: '01',
