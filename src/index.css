@@ -1725,3 +1725,185 @@ textarea {
     animation: none;
   }
 }
+
+/* En papel no hay fondo oscuro: el navegador lo omite y el texto claro
+   desaparece. El aviso y la privacidad tienen que poder archivarse.
+   La pantalla no cambia. El hero cerrado sigue con las mismas palabras. */
+@media print {
+  :root {
+    --bg: #fff;
+    --bg-elevated: #fff;
+    --bg-panel: #fff;
+    --text: #14181d;
+    --muted: #2f3944;
+    --cyan: #0c5f82;
+    --cyan-deep: #0c5f82;
+    --cyan-soft: transparent;
+    --line: rgba(20, 24, 29, 0.2);
+    --line-strong: rgba(20, 24, 29, 0.4);
+    --line-control: #3d4c5a;
+    --line-control-hover: #3d4c5a;
+    color-scheme: light;
+  }
+
+  @page {
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: var(--text) !important;
+  }
+
+  body::before,
+  body::after,
+  .skip-link,
+  .nav-links,
+  .nav-cta,
+  .nav-cta-compact,
+  .menu-toggle,
+  .nav-scrim,
+  .mobile-nav,
+  .hero-visual,
+  .contact-form button {
+    display: none !important;
+  }
+
+  .site-header {
+    position: static;
+    height: auto;
+    background: transparent !important;
+    border: 0;
+  }
+
+  .site-header .inner {
+    height: auto;
+    padding-bottom: 0.75rem;
+  }
+
+  .hero {
+    min-height: 0;
+    padding: 0 0 1rem;
+  }
+
+  .hero h1,
+  .legal-page h1 {
+    font-size: 1.7rem;
+  }
+
+  .section {
+    padding: 1.15rem 0;
+  }
+
+  .section-split .section-heading {
+    position: static;
+  }
+
+  #laboratorio {
+    background: #fff;
+  }
+
+  .site-footer {
+    padding: 1.15rem 0 0;
+  }
+
+  .lab-app,
+  .field input,
+  .field textarea,
+  .contact-panel,
+  .lab-option,
+  .lab-rows li.is-open {
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .field input,
+  .field textarea {
+    color: var(--text) !important;
+    border-color: var(--line-control) !important;
+  }
+
+  .field-error {
+    color: #7a2430;
+  }
+
+  .lab-rows li.is-open {
+    border-left: 3px solid var(--cyan);
+  }
+
+  .lab-trail li.is-done .lab-trail-mark,
+  .lab-trail li.is-now .lab-trail-mark {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .btn {
+    min-height: 0;
+    padding: 0;
+    border: 0 !important;
+    border-radius: 0;
+    background: transparent !important;
+    color: var(--cyan) !important;
+    box-shadow: none !important;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  a:any-link {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  a.brand-lockup:any-link {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  a[href^='http']::after,
+  a[href^='/']::after,
+  a[href^='#']::after {
+    font-weight: 400;
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+  }
+
+  a[href^='/']::after {
+    content: ' (https://solunit.es' attr(href) ')';
+  }
+
+  a[href^='#']::after {
+    content: ' (https://solunit.es/' attr(href) ')';
+  }
+
+  a.brand-lockup::after,
+  .legal-facts a[href^='http']::after {
+    content: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  .service-row,
+  .method-item,
+  .legal-facts div,
+  .legal-section,
+  .lab-app,
+  .footer-bottom {
+    break-inside: avoid;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+}
