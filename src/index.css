@@ -311,6 +311,19 @@ textarea {
   transition: color 160ms ease;
 }
 
+/* Desde 720px estos enlaces sustituyen al menú, cuyos ítems
+   medían unos 48px. El texto y el subrayado no se mueven: el
+   área de toque llega a 44px y casi cubre el hueco entre palabras. */
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -0.6rem;
+  right: -0.6rem;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
 .nav-links a::after {
   content: '';
   position: absolute;
