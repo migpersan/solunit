@@ -706,6 +706,54 @@ function mailtoHref(fields: ReturnType<typeof readContactForm>) {
   return `mailto:${contact.email}?subject=${subject}&body=${body}`
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+}
+
+// Chrome cuenta action="mailto:" como contenido mixto en una página https
+// y Lighthouse deja de tratar el sitio como seguro. Con JavaScript el envío
+// abre el correo desde el manejador. Sin JavaScript el navegador solo
+// interpreta este segundo formulario, que vive dentro de noscript.
+function mailFormFallback() {
+  const email = escapeHtml(contact.email)
+  const hint = escapeHtml(contact.formMessageHint)
+  const submit = escapeHtml(contact.formSubmit)
+  const note = escapeHtml(contact.formHint)
+  const ownerName = escapeHtml(owner.name)
+  return `<style>
+noscript{display:block !important}
+.contact-form-live{display:none !important}
+</style>
+<form class="contact-form" action="mailto:${email}" method="post" enctype="text/plain" accept-charset="UTF-8" aria-labelledby="contact-title">
+<div class="field-row">
+<div class="field">
+<label for="name-mail">Nombre</label>
+<input id="name-mail" name="Nombre" autocomplete="name" required maxlength="120">
+</div>
+<div class="field">
+<label for="company-mail">Empresa (opcional)</label>
+<input id="company-mail" name="Empresa" autocomplete="organization" maxlength="160">
+</div>
+</div>
+<div class="field">
+<label for="email-mail">Email</label>
+<input id="email-mail" name="Email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required maxlength="254">
+</div>
+<div class="field">
+<label for="message-mail">Qué necesitas</label>
+<p class="field-hint" id="message-hint-mail">${hint}</p>
+<textarea id="message-mail" name="Mensaje" required maxlength="2000" aria-describedby="message-hint-mail"></textarea>
+</div>
+<button class="btn btn-primary" type="submit" aria-describedby="contact-form-hint-mail contact-form-privacy-mail">${submit}</button>
+<p class="form-note" id="contact-form-hint-mail">${note}</p>
+<p class="form-note" id="contact-form-privacy-mail">Responsable: ${ownerName}. El mensaje sirve para responderte y no se guarda en esta web. <a href="/privacidad">Política de privacidad</a>.</p>
+</form>`
+}
+
 function copyWithSelection(text: string) {
   const area = document.createElement('textarea')
   area.value = text
@@ -829,10 +877,8 @@ function Contact() {
           </div>
 
           <form
-            className="contact-form"
-            action={`mailto:${contact.email}`}
-            method="post"
-            encType="text/plain"
+            className="contact-form contact-form-live"
+            method="dialog"
             noValidate
             aria-labelledby="contact-title"
             onSubmit={onSubmit}
@@ -940,6 +986,7 @@ function Contact() {
               </div>
             ) : null}
           </form>
+          <noscript dangerouslySetInnerHTML={{ __html: mailFormFallback() }} />
         </div>
       </div>
     </section>
