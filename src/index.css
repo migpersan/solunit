@@ -586,7 +586,12 @@ textarea {
   display: block;
   margin-top: 0.45rem;
   color: var(--cyan);
-  font-size: 0.72rem;
+  /* 0.72rem se queda en 11.5px, por debajo del suelo de 12px, y en
+     mayúsculas se lee peor. 0.8125rem son 13px. El alto de línea
+     vuelve a 18px, como antes, para no empujar los CTA. En 320px
+     el lema sigue en una sola línea. Las palabras no cambian. */
+  font-size: 0.8125rem;
+  line-height: 1.4;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
