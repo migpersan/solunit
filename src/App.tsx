@@ -168,12 +168,12 @@ function Header({ home }: { home: boolean }) {
 
   useLayoutEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
+    // La marca y «Hablemos» siguen a la vista, fuera del velo. Si quedan
+    // inertes, el toque no hace nada. El resto de la página sí se bloquea.
     const locked = [
       document.querySelector('.skip-link'),
-      document.querySelector('.site-header .brand-lockup'),
       document.querySelector('.nav-links'),
       document.querySelector('.nav-cta'),
-      document.querySelector('.nav-cta-compact'),
       document.getElementById('contenido'),
       document.querySelector('.site-footer'),
     ].filter((node): node is HTMLElement => node instanceof HTMLElement)
@@ -191,7 +191,12 @@ function Header({ home }: { home: boolean }) {
     const nav = document.getElementById('mobile-nav')
     const items = () => {
       const links = nav ? [...nav.querySelectorAll<HTMLElement>('a[href]')] : []
-      return toggleRef.current ? [toggleRef.current, ...links] : links
+      const chrome = [
+        document.querySelector<HTMLElement>('.site-header .brand-lockup'),
+        document.querySelector<HTMLElement>('.nav-cta-compact'),
+        toggleRef.current,
+      ].filter((el): el is HTMLElement => el instanceof HTMLElement)
+      return [...chrome, ...links]
     }
 
     const onKey = (event: KeyboardEvent) => {
@@ -253,7 +258,7 @@ function Header({ home }: { home: boolean }) {
           className="brand-lockup"
           href={home ? '#top' : '/'}
           aria-label="Solunit inicio"
-          onClick={home ? (event) => followAnchor(event, '#top') : undefined}
+          onClick={home ? (event) => goToSection(event, '#top') : undefined}
         >
           <img
             src="/mark.svg"
