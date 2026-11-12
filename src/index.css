@@ -478,6 +478,15 @@ textarea {
   border-color: var(--line-control-hover);
 }
 
+/* No es texto: sin el hueco de la línea de base, y del mismo tamaño
+   abierto o cerrado. */
+.menu-toggle svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+
 .nav-scrim {
   position: fixed;
   z-index: 30;
