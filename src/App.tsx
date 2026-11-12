@@ -814,6 +814,32 @@ function copyContactBody(text: string) {
 type ContactDraft = ReturnType<typeof readContactForm>
 type CopyState = 'idle' | 'done' | 'failed'
 
+// El clic en Enviar deja el botón a la vista y el campo inválido arriba,
+// fuera o bajo la cabecera. focus() no corrige ese salto. La etiqueta
+// queda 12px bajo la barra, con el aviso en pantalla si cabe. El salto
+// es inmediato: uno suave llega después del foco.
+function revealInvalidField(input: HTMLInputElement | HTMLTextAreaElement) {
+  const label = input.labels?.[0] ?? input
+  const error = input
+    .getAttribute('aria-describedby')
+    ?.split(/\s+/)
+    .map((id) => document.getElementById(id))
+    .find(
+      (node): node is HTMLElement =>
+        node instanceof HTMLElement && node.classList.contains('field-error'),
+    )
+  const header = document.querySelector('.site-header')
+  const topLimit = header instanceof HTMLElement ? header.offsetHeight : 0
+  const margin = 12
+  const labelRect = label.getBoundingClientRect()
+  const tailBottom = (error ?? label).getBoundingClientRect().bottom
+  input.focus({ preventScroll: true })
+  const inView = labelRect.top >= topLimit + margin && tailBottom <= window.innerHeight - margin
+  if (inView) return
+  const top = labelRect.top + window.scrollY - topLimit - margin
+  window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
+}
+
 function Contact() {
   const [errors, setErrors] = useState<ContactErrors>({})
   const [submitted, setSubmitted] = useState(false)
@@ -827,12 +853,22 @@ function Contact() {
     const field = focusField.current
     if (!field) return
     focusField.current = null
-    document.getElementById(field)?.focus()
+    const input = document.getElementById(field)
+    if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+      revealInvalidField(input)
+    }
   }, [errors])
 
   useEffect(() => {
     if (!sent) return
-    document.getElementById('contact-form-status')?.scrollIntoView({ block: 'nearest' })
+    const status = document.getElementById('contact-form-status')
+    if (!status) return
+    const header = document.querySelector('.site-header')
+    const topLimit = header instanceof HTMLElement ? header.offsetHeight : 0
+    const rect = status.getBoundingClientRect()
+    if (rect.top >= topLimit + 12 && rect.bottom <= window.innerHeight - 12) return
+    const top = rect.top + window.scrollY - topLimit - 12
+    window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
   }, [sent])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
