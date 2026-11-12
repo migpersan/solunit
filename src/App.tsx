@@ -564,7 +564,19 @@ function Lab() {
     const rect = stage.getBoundingClientRect()
     const visible = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, topLimit)
     if (visible >= 160) return
-    stage.scrollIntoView({ block: 'start' })
+    const option = stage.parentElement?.querySelector<HTMLElement>('.lab-option:has(input:checked)')
+    const optionRect = option?.getBoundingClientRect()
+    // En columna la opción elegida queda encima del ejemplo. El margen
+    // fijo del escenario solo alcanza para la última: la primera y la
+    // segunda terminan bajo la cabecera, con el foco fuera. El salto es
+    // inmediato para que esa opción no cruce la barra mientras se mueve.
+    const stacked = optionRect !== undefined && optionRect.bottom <= rect.top + 1
+    if (stacked && optionRect) {
+      const top = optionRect.top + window.scrollY - topLimit - 12
+      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
+      return
+    }
+    stage.scrollIntoView({ block: 'start', behavior: 'instant' })
   }, [active])
 
   function choose(index: number) {
