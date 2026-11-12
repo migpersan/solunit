@@ -294,16 +294,27 @@
       }
 
       /* Igual que la home: sin esto el botón principal queda
-         con el mismo trazo que el secundario. Highlight es del sistema. */
+         con el mismo trazo que el secundario. Highlight es del sistema.
+         El degradado, al desaparecer, deja un respaldo blanco detrás
+         del rótulo y el texto blanco se pierde. */
       @media (forced-colors: active) {
         .btn-primary,
         .btn-primary:hover,
         .btn-primary:active {
-          background: Highlight;
+          forced-color-adjust: none;
+          background-color: Highlight;
+          background-image: none;
           color: HighlightText;
+          -webkit-text-fill-color: HighlightText;
           border-color: Highlight;
           box-shadow: none;
           text-decoration: none;
+          opacity: 1;
+        }
+
+        .btn-primary:focus-visible {
+          outline: 2px solid CanvasText;
+          outline-offset: 3px;
         }
       }
 

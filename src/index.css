@@ -1934,16 +1934,31 @@ textarea {
    lienzo o desaparece: el botón principal, la sección abierta, la
    opción elegida y la fila en curso se leen igual que el resto.
    Highlight es un color del sistema y el navegador lo conserva.
-   La pantalla normal no cambia. */
+   La pantalla normal no cambia.
+   El degradado del botón, al desaparecer, deja el relleno a medias
+   y el navegador pone un respaldo blanco detrás del rótulo. Si el
+   texto también es blanco (HighlightText), el rótulo se pierde.
+   Sin el ajuste automático, Highlight pinta el control y
+   HighlightText el texto. El anillo de foco usa el color del texto
+   del lienzo: HighlightText sobre el lienzo no se vería. */
 @media (forced-colors: active) {
   .btn-primary,
   .btn-primary:hover,
   .btn-primary:active {
-    background: Highlight;
+    forced-color-adjust: none;
+    background-color: Highlight;
+    background-image: none;
     color: HighlightText;
+    -webkit-text-fill-color: HighlightText;
     border-color: Highlight;
     box-shadow: none;
     text-decoration: none;
+    opacity: 1;
+  }
+
+  .btn-primary:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 3px;
   }
 
   .nav-links a[aria-current]::after {
@@ -1963,10 +1978,19 @@ textarea {
   }
 
   .lab-option:has(input:checked) {
-    background: Highlight;
+    forced-color-adjust: none;
+    background-color: Highlight;
+    background-image: none;
     color: HighlightText;
+    -webkit-text-fill-color: HighlightText;
     border-color: Highlight;
     box-shadow: none;
+    opacity: 1;
+  }
+
+  .lab-option:has(input:focus-visible) {
+    outline: 2px solid CanvasText;
+    outline-offset: 3px;
   }
 
   .lab-rows li.is-open {
