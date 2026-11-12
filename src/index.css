@@ -1067,6 +1067,27 @@ textarea {
   }
 }
 
+/* En columna el recorrido queda bajo la última fila. Sin un rótulo,
+   parece de esa fila y no de la que está abierta. La hora y el estado
+   ya están en la lista: aquí basta el nombre, más bajo que en el panel
+   de al lado. Desde 800px el detalle va en su columna y conserva
+   hora, nombre y estado. */
+@media screen and (max-width: 799px) {
+  .lab-detail-kicker,
+  .lab-detail-state {
+    display: none;
+  }
+
+  .lab-detail-title {
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .lab-trail {
+    margin-top: 0.65rem;
+  }
+}
+
 @media (min-width: 800px) {
   .lab-app-body {
     grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
