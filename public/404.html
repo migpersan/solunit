@@ -292,6 +292,75 @@
           scroll-behavior: auto;
         }
       }
+
+      /* Igual que la home: sin el fondo oscuro, el texto claro no se lee. */
+      @media print {
+        :root {
+          --bg: #fff;
+          --text: #14181d;
+          --muted: #2f3944;
+          --cyan: #0c5f82;
+          --cyan-deep: #0c5f82;
+          --line: #3d4c5a;
+          color-scheme: light;
+        }
+
+        @page {
+          margin: 16mm;
+        }
+
+        html,
+        body {
+          background: #fff !important;
+          color: var(--text) !important;
+          min-height: 0;
+        }
+
+        .skip-link {
+          display: none !important;
+        }
+
+        main {
+          padding-top: 1.25rem;
+          padding-bottom: 1.25rem;
+        }
+
+        h1 {
+          font-size: 1.7rem;
+        }
+
+        .btn {
+          min-height: 0;
+          padding: 0;
+          border: 0 !important;
+          border-radius: 0;
+          background: transparent !important;
+          color: var(--cyan) !important;
+          box-shadow: none !important;
+          text-decoration: underline;
+          text-underline-offset: 0.18em;
+        }
+
+        a:any-link {
+          color: var(--cyan);
+        }
+
+        a.brand:any-link {
+          color: var(--text);
+          text-decoration: none;
+        }
+
+        a[href^='/']::after {
+          content: ' (https://solunit.es' attr(href) ')';
+          font-weight: 400;
+          font-size: 0.85em;
+          word-break: break-all;
+        }
+
+        a.brand::after {
+          content: none;
+        }
+      }
     </style>
   </head>
   <body>
