@@ -293,6 +293,20 @@
         }
       }
 
+      /* Igual que la home: sin esto el botón principal queda
+         con el mismo trazo que el secundario. Highlight es del sistema. */
+      @media (forced-colors: active) {
+        .btn-primary,
+        .btn-primary:hover,
+        .btn-primary:active {
+          background: Highlight;
+          color: HighlightText;
+          border-color: Highlight;
+          box-shadow: none;
+          text-decoration: none;
+        }
+      }
+
       /* Igual que la home: sin el fondo oscuro, el texto claro no se lee. */
       @media print {
         :root {
