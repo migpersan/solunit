@@ -209,6 +209,16 @@ p {
     background: Highlight;
     color: HighlightText;
   }
+
+  /* El relleno del símbolo es un color fijo. En contraste alto
+     tiene que seguir el texto, si no desaparece sobre el fondo. */
+  .mark svg path {
+    fill: CanvasText;
+  }
+
+  .hero-visual .mark {
+    filter: none;
+  }
 }
 
 /* El ancla recibe el foco al saltar. Un marco alrededor de toda
@@ -296,7 +306,19 @@ textarea {
   transform: translateY(-50%);
 }
 
-.brand-lockup img {
+.mark {
+  display: block;
+  line-height: 0;
+  flex: none;
+}
+
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-lockup .mark {
   width: auto;
   height: 40px;
   aspect-ratio: 446 / 392;
@@ -623,7 +645,7 @@ textarea {
   border-radius: 50%;
 }
 
-.hero-visual img {
+.hero-visual .mark {
   position: relative;
   z-index: 1;
   width: min(86%, 360px);
@@ -1322,7 +1344,7 @@ textarea {
   color: var(--text);
 }
 
-.footer-brand .brand-lockup img {
+.footer-brand .brand-lockup .mark {
   height: 32px;
 }
 
@@ -1511,7 +1533,7 @@ textarea {
     gap: 0.4rem;
   }
 
-  .brand-lockup img {
+  .brand-lockup .mark {
     height: 32px;
   }
 

@@ -15,6 +15,22 @@ import LegalPage from './LegalPage'
 
 const serviceId = (index: number) => `servicio-${index + 1}`
 
+// Mismo trazo que public/mark.svg, que la 404 sigue pidiendo.
+// En la página va dentro del HTML: la cabecera no espera otra petición.
+function Mark() {
+  return (
+    <span className="mark">
+      <svg viewBox="0 0 446 392" width={446} height={392} fill="none" aria-hidden="true">
+        <path
+          fill="#47C1EA"
+          d="M 84 389.7 L 139.3 333.6 L 194.5 278.7 L 229.2 278.9 C 262.4 279.1 264.2 279 268.7 277 C 277.5 273.2 277.8 272.1 278 246.4 L 278.1 224 L 236.8 224 L 195.5 224 L 140 279.5 L 84.5 335 L 42.3 335 L 0 334.2 L 83 250.5 L 166 167.3 L 139 167 L 112 167 L 112 133.5 L 112 99.9 L 115.1 91.7 C 118.7 82.4 121.2 78.7 129 71.2 C 135.9 64.5 140.5 61.8 150.5 58.3 C 158.4 55.7 159 55.6 191.2 55.1 L 223.9 54.5 L 251.1 27.2 L 278.4 0 L 320.2 0 L 362 0.8 L 306.8 56.8 L 251.6 112 L 215.5 112 C 175.4 112 174.8 112.1 170.3 118.8 C 168.2 121.9 168.1 123.2 168 144.5 L 167.9 167 L 209.2 167 L 250.5 167 L 306.5 111 L 362.5 55 L 404.2 55 L 446 55.9 L 363.5 139.2 L 281 222.4 L 307.8 223 L 334.5 223 L 334.3 255.2 L 333.7 291.3 L 329.1 303.5 C 321.5 319 308.5 329.3 291.6 333.1 C 284.7 334.7 278.9 335 253.5 335 L 223.5 335 L 195.5 363 L 167.4 391 L 125.7 391 L 84 389.7 Z"
+        />
+        <path fill="#29AAE1" d="M 170 170 L 252 170 L 276 220 L 194 220 Z" />
+      </svg>
+    </span>
+  )
+}
+
 function useActiveSection(ids: readonly string[]) {
   const [active, setActive] = useState<string | null>(null)
 
@@ -261,13 +277,7 @@ function Header({ home }: { home: boolean }) {
           aria-label="Solunit inicio"
           onClick={home ? (event) => goToSection(event, '#top') : undefined}
         >
-          <img
-            src="/mark.svg"
-            alt=""
-            width={446}
-            height={392}
-            decoding="async"
-          />
+          <Mark />
           <strong>{brand.name}</strong>
         </a>
 
@@ -391,14 +401,7 @@ function Hero() {
         </div>
 
         <div className="hero-visual" aria-hidden="true">
-          <img
-            src="/mark.svg"
-            alt=""
-            width={446}
-            height={392}
-            decoding="async"
-            fetchPriority="high"
-          />
+          <Mark />
         </div>
       </div>
     </section>
@@ -1010,14 +1013,7 @@ function Footer({ page }: { page: PageId }) {
               aria-label="Solunit inicio"
               onClick={home ? (event) => followAnchor(event, '#top') : undefined}
             >
-              <img
-                src="/mark.svg"
-                alt=""
-                width={446}
-                height={392}
-                loading="lazy"
-                decoding="async"
-              />
+              <Mark />
               <strong>{brand.name}</strong>
             </a>
             <p>{brand.tagline}</p>

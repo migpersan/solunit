@@ -12,6 +12,11 @@ const marker = 'data-prerendered="true"'
 const heroTitle = 'Tecnología a medida para empresas que quieren llegar más lejos.'
 
 const template = await readFile(indexFile, 'utf8')
+const markFile = await readFile(new URL('../public/mark.svg', import.meta.url), 'utf8')
+const markPaths = [...markFile.matchAll(/\sd="([^"]+)"/g)].map((match) => match[1])
+if (markPaths.length !== 2) {
+  throw new Error('public/mark.svg no tiene los dos trazos de la marca.')
+}
 
 if (template.includes(marker)) {
   console.log('Prerender: el HTML ya incluye la landing.')
@@ -117,6 +122,12 @@ try {
       throw new Error(
         `El HTML de ${output.id} no empieza por el enlace de salto. Inicio: ${appHtml.slice(0, 240)}`,
       )
+    }
+
+    // La cabecera, el hero y el pie llevan el símbolo en el HTML.
+    // Pedir /mark.svg otra vez retrasa la marca y compite con las fuentes.
+    if (appHtml.includes('/mark.svg') || markPaths.some((d) => !appHtml.includes(d))) {
+      throw new Error(`La página ${output.id} tiene que dibujar public/mark.svg y no pedirlo.`)
     }
 
     let html = applyHead(template, meta, jsonLd)
