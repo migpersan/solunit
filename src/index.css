@@ -1559,9 +1559,24 @@ textarea {
   }
 }
 
-/* Desde 800px caben la marca, las cuatro secciones y «Hablemos de tu
-   proyecto». A 700px ese botón ya se sale, así que se queda el acceso
-   corto y el menú. El hero y el cuerpo siguen en una columna hasta 980px. */
+/* Desde 720px caben la marca, las cuatro secciones y el «Hablemos» corto.
+   El menú repetiría esos enlaces: se esconde y el botón largo sigue
+   sin entrar (a 768px roza el borde). Desde 800px sí cabe
+   «Hablemos de tu proyecto» y sustituye al corto. El hero y el cuerpo
+   siguen en una columna hasta 980px. */
+@media (min-width: 720px) {
+  .nav-links {
+    display: inline-flex;
+  }
+
+  .menu-toggle,
+  .nav-scrim,
+  .mobile-nav,
+  .mobile-nav.is-open {
+    display: none;
+  }
+}
+
 @media (min-width: 800px) {
   .nav-links,
   .btn.nav-cta {
