@@ -169,7 +169,10 @@ function followAnchor(event: MouseEvent<HTMLAnchorElement>, href: string) {
   if (decodeURIComponent(window.location.hash) !== href) history.pushState(null, '', href)
   const heading = headingIn(target)
   ;(heading ?? target).focus({ preventScroll: true })
-  target.scrollIntoView()
+  // El CSS pide un salto suave. Con el foco ya en el título, ese salto
+  // lo deja fuera hasta que termina: el siguiente Tab sale de un sitio
+  // que no se ve. La carga con ancla ya usa el salto inmediato.
+  target.scrollIntoView({ behavior: 'instant' })
 }
 
 function revealInMenu(item: HTMLElement, menu: HTMLElement) {
