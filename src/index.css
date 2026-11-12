@@ -918,8 +918,9 @@ textarea {
   display: grid;
   gap: 1.15rem;
   min-width: 0;
-  /* El documento ya reserva la cabecera. Este margen deja sitio
-     a la opción recién elegida, que queda justo encima. */
+  /* El documento ya reserva la cabecera. En columna este margen
+     solo deja sitio a la última opción; el salto coloca la elegida
+     justo debajo de la barra. */
   scroll-margin-top: calc(var(--header) + 0.75rem);
 }
 
