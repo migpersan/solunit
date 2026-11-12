@@ -326,12 +326,13 @@ function Header({ home }: { home: boolean }) {
         />
       ) : null}
 
-      <div
+      {/* Navegación, no diálogo. La marca y «Hablemos» quedan fuera del
+          panel y siguen activos: un diálogo modal los ocultaría al lector
+          de pantalla aunque el toque sí funcionara. */}
+      <nav
         id="mobile-nav"
         className={`mobile-nav${open ? ' is-open' : ''}`}
-        role={open ? 'dialog' : undefined}
-        aria-modal={open ? true : undefined}
-        aria-label={open ? 'Menú' : undefined}
+        aria-label="Menú"
       >
         <div className="site-shell">
           {nav.map((item) => (
@@ -352,7 +353,7 @@ function Header({ home }: { home: boolean }) {
             {hero.primaryCta.label}
           </a>
         </div>
-      </div>
+      </nav>
     </header>
   )
 }
