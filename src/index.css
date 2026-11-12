@@ -273,11 +273,27 @@ textarea {
 }
 
 .brand-lockup {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
   min-width: max-content;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
+}
+
+/* El símbolo mide 32px en el móvil y 40px en el resto: por debajo
+   de los 44px del menú y de «Hablemos». El área crece en vertical
+   y no a los lados, para no tapar el botón ni las secciones. */
+.brand-lockup::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 44px;
+  transform: translateY(-50%);
 }
 
 .brand-lockup img {
@@ -292,6 +308,11 @@ textarea {
   letter-spacing: 0.14em;
   font-weight: 700;
   white-space: nowrap;
+  transition: color 160ms ease;
+}
+
+.brand-lockup:hover strong {
+  color: var(--cyan);
 }
 
 .nav-links {
@@ -1147,10 +1168,23 @@ textarea {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.3em;
+  transition: color 160ms ease;
 }
 
+.email:hover {
+  color: var(--text);
+}
+
+/* El correo del panel es un enlace suelto, no una palabra dentro
+   de la frase. A 1.15rem medía 26px: se agranda el propio cajón
+   para no invadir el párrafo de encima. */
 .contact-copy .email {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 1.15rem;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
 }
 
 .contact-form {
@@ -1296,7 +1330,12 @@ textarea {
 }
 
 .footer-nav a {
-  padding: 0.35rem 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
   transition: color 160ms ease;
 }
 
@@ -1306,7 +1345,12 @@ textarea {
 
 .site-footer .email {
   justify-self: start;
-  padding: 0.35rem 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
 }
 
 .footer-bottom {
@@ -1331,10 +1375,15 @@ textarea {
 }
 
 .footer-legal-nav a {
-  padding: 0.4rem 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
   color: var(--muted);
   text-decoration: underline;
   text-underline-offset: 0.22em;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
 }
 
 .footer-legal-nav a:hover,
@@ -1760,6 +1809,8 @@ textarea {
 
   .btn,
   .nav-links a::after,
+  .brand-lockup strong,
+  .email,
   .lab-option {
     transition: none !important;
     animation: none !important;
@@ -1855,6 +1906,17 @@ textarea {
 
   .site-footer {
     padding: 1.15rem 0 0;
+  }
+
+  .brand-lockup::before {
+    content: none;
+  }
+
+  .contact-copy .email,
+  .site-footer .email,
+  .footer-nav a,
+  .footer-legal-nav a {
+    min-height: 0;
   }
 
   .lab-app,
