@@ -1252,9 +1252,16 @@ textarea {
   align-content: start;
 }
 
+/* Etiqueta y pista compartían 0.85rem y --muted: «Qué necesitas»
+   se leía como el inicio de la frase de ayuda. La etiqueta pasa
+   al cuerpo del campo (1rem) y al color del texto. La pista sigue
+   en 0.85rem y en --muted. */
 .field label {
-  font-size: 0.85rem;
-  color: var(--muted);
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.4;
+  cursor: pointer;
 }
 
 .field-hint {
