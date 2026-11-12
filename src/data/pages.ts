@@ -24,13 +24,30 @@ export const pageMeta = {
 
 export type PageId = keyof typeof pageMeta
 
+/** Título visible del documento. La ficha (`title`) añade la marca. */
+export const pageHeading = {
+  'aviso-legal': 'Aviso legal',
+  privacidad: 'Privacidad',
+} as const satisfies Record<Exclude<PageId, 'home'>, string>
+
 /**
  * Grafo de la página. La organización y el sitio van en todas.
  * Los servicios solo en la home: es donde se leen.
+ * El aviso y la privacidad añaden la fecha que ya se lee y la ruta hasta esa página.
  * El documento de identidad no entra: está en el texto del aviso legal.
  */
 export function pageJsonLd(page: PageId) {
   const meta = pageMeta[page]
+  const webpage: Record<string, unknown> = {
+    '@type': 'WebPage',
+    '@id': `${meta.canonical}#pagina`,
+    url: meta.canonical,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: 'es',
+    isPartOf: { '@id': websiteId },
+    about: { '@id': organizationId },
+  }
   const graph: Record<string, unknown>[] = [
     organizationNode(),
     {
@@ -42,17 +59,32 @@ export function pageJsonLd(page: PageId) {
       inLanguage: 'es',
       publisher: { '@id': organizationId },
     },
-    {
-      '@type': 'WebPage',
-      '@id': `${meta.canonical}#pagina`,
-      url: meta.canonical,
-      name: meta.title,
-      description: meta.description,
-      inLanguage: 'es',
-      isPartOf: { '@id': websiteId },
-      about: { '@id': organizationId },
-    },
+    webpage,
   ]
+
+  if (page !== 'home') {
+    const crumbId = `${meta.canonical}#ruta`
+    webpage.dateModified = owner.updated
+    webpage.breadcrumb = { '@id': crumbId }
+    graph.push({
+      '@type': 'BreadcrumbList',
+      '@id': crumbId,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Inicio',
+          item: owner.site,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: pageHeading[page],
+          item: meta.canonical,
+        },
+      ],
+    })
+  }
 
   if (page === 'home') {
     graph.push({
