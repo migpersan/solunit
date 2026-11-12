@@ -30,6 +30,21 @@ function Mark() {
   )
 }
 
+// ☰ y ✕ no están en Manrope ni en Syne. El navegador las saca de otra
+// familia y el icono abierto no mide lo mismo que el cerrado. El trazo
+// vive en el botón y usa su color.
+function MenuGlyph({ open }: { open: boolean }) {
+  return (
+    <svg viewBox="0 0 20 20" width={20} height={20} fill="none" aria-hidden="true">
+      <path
+        d={open ? 'M5 5 L15 15 M15 5 L5 15' : 'M3.5 5.5 H16.5 M3.5 10 H16.5 M3.5 14.5 H16.5'}
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
+    </svg>
+  )
+}
+
 function useActiveSection(ids: readonly string[]) {
   const [active, setActive] = useState<string | null>(null)
 
@@ -319,7 +334,7 @@ function Header({ home }: { home: boolean }) {
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           onClick={() => setOpen((value) => !value)}
         >
-          {open ? '✕' : '☰'}
+          <MenuGlyph open={open} />
         </button>
       </div>
 
