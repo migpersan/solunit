@@ -1313,6 +1313,27 @@ textarea {
   outline-color: #e7a396;
 }
 
+/* Con el tema oscuro, Chrome rellena el campo de azul (70, 90, 126)
+   al autocompletar. El campo vacío se ve #070b0f: el mismo tono
+   tapa ese azul. El borde, el anillo de foco y el error no se tocan.
+   En contraste forzado manda el color del sistema. */
+@media not (forced-colors: active) {
+  .field input:autofill,
+  .field input:-webkit-autofill,
+  .field textarea:autofill,
+  .field textarea:-webkit-autofill {
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+    box-shadow: inset 0 0 0 1000px #070b0f;
+    /* El navegador anima el fondo hacia el azul. Retrasar esa
+       animación deja visible solo el tono del campo. El borde
+       sigue cambiando al momento. */
+    transition:
+      border-color 160ms ease,
+      background-color 99999s ease-out;
+  }
+}
+
 .form-note {
   margin: 0;
   color: var(--muted);
@@ -2041,6 +2062,15 @@ textarea {
   .field textarea {
     color: var(--text) !important;
     border-color: var(--line-control) !important;
+  }
+
+  .field input:autofill,
+  .field input:-webkit-autofill,
+  .field textarea:autofill,
+  .field textarea:-webkit-autofill {
+    -webkit-text-fill-color: var(--text);
+    box-shadow: none;
+    background: #fff;
   }
 
   .field-error {
