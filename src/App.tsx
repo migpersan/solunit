@@ -223,8 +223,9 @@ function Header({ home }: { home: boolean }) {
     }
 
     const onResize = () => {
-      // La misma anchura en la que la cabecera muestra las secciones.
-      if (window.matchMedia('(min-width: 800px)').matches) setOpen(false)
+      // Desde 720px el botón del menú ya no está: las secciones
+      // están en la cabecera. Si se queda abierto, la página sigue inerte.
+      if (window.matchMedia('(min-width: 720px)').matches) setOpen(false)
     }
 
     window.addEventListener('keydown', onKey)
