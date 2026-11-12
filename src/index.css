@@ -1930,6 +1930,57 @@ textarea {
   }
 }
 
+/* En contraste forzado el cian del acento se vuelve el color del
+   lienzo o desaparece: el botón principal, la sección abierta, la
+   opción elegida y la fila en curso se leen igual que el resto.
+   Highlight es un color del sistema y el navegador lo conserva.
+   La pantalla normal no cambia. */
+@media (forced-colors: active) {
+  .btn-primary,
+  .btn-primary:hover,
+  .btn-primary:active {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  .nav-links a[aria-current]::after {
+    background: Highlight;
+    height: 2px;
+  }
+
+  /* El transparente del resto se vuelve el azul de los enlaces:
+     todas las filas parecen activas. El lienzo las deja en blanco
+     y solo la abierta usa Highlight. */
+  .mobile-nav a:not(.btn) {
+    border-left-color: Canvas;
+  }
+
+  .mobile-nav a:not(.btn)[aria-current] {
+    border-left-color: Highlight;
+  }
+
+  .lab-option:has(input:checked) {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+    box-shadow: none;
+  }
+
+  .lab-rows li.is-open {
+    background: Canvas;
+    box-shadow: none;
+    border-left: 4px solid Highlight;
+  }
+
+  .footer-legal-nav a[aria-current='page'] {
+    text-decoration-color: Highlight;
+    text-decoration-thickness: 3px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
