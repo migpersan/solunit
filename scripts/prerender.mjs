@@ -262,6 +262,12 @@ try {
     console.log(`Prerender: ${output.file} (${html.length} bytes)`)
   }
 
+  const notFoundFile = path.join(path.dirname(indexFile), '404.html')
+  const notFound = await readFile(notFoundFile, 'utf8')
+  if (notFound.includes('/mark.svg') || markPaths.some((d) => !notFound.includes(d))) {
+    throw new Error('La 404 tiene que dibujar public/mark.svg y no pedirlo.')
+  }
+
   const sitemapFile = path.join(path.dirname(indexFile), 'sitemap.xml')
   const sitemap = await readFile(sitemapFile, 'utf8')
   const dated = [`aviso-legal`, `privacidad`]

@@ -14,7 +14,8 @@ import { owner } from './data/legal'
 import { pageMeta, type PageId } from './data/pages'
 import LegalPage from './LegalPage'
 
-// Mismo trazo que public/mark.svg, que la 404 sigue pidiendo.
+// Mismo trazo que public/mark.svg. La 404 lo repite en su HTML:
+// un img no deja que el contraste alto cambie el relleno.
 // En la página va dentro del HTML: la cabecera no espera otra petición.
 function Mark() {
   return (
