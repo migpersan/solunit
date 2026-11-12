@@ -104,9 +104,9 @@ function pageHtml(appHtml) {
 
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-  const { pageMeta } = await vite.ssrLoadModule('/src/data/pages.ts')
-  const { organizationJsonLd, owner } = await vite.ssrLoadModule('/src/data/legal.ts')
-  const jsonLd = organizationJsonLd()
+  const { pageMeta, pageJsonLd } = await vite.ssrLoadModule('/src/data/pages.ts')
+  const { owner } = await vite.ssrLoadModule('/src/data/legal.ts')
+  const { hero, services } = await vite.ssrLoadModule('/src/data/content.ts')
 
   const outputs = [
     { id: 'home', file: indexFile },
@@ -130,8 +130,42 @@ try {
       throw new Error(`La página ${output.id} tiene que dibujar public/mark.svg y no pedirlo.`)
     }
 
-    let html = applyHead(template, meta, jsonLd)
+    let html = applyHead(template, meta, pageJsonLd(output.id))
     html = html.replace(rootPattern, () => `<div id="root" ${marker}>${appHtml}</div>`)
+
+    const ldMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)
+    if (!ldMatch) throw new Error(`La página ${output.id} no tiene JSON-LD.`)
+    const ld = JSON.parse(ldMatch[1])
+    const graph = Array.isArray(ld['@graph']) ? ld['@graph'] : []
+    const node = (type) => graph.find((item) => item['@type'] === type)
+    const webpage = node('WebPage')
+    const organization = node('Organization')
+    if (ld['@context'] !== 'https://schema.org' || !webpage || !organization || !node('WebSite')) {
+      throw new Error(`El JSON-LD de ${output.id} tiene que describir la página, la organización y el sitio.`)
+    }
+    if (
+      webpage.name !== meta.title ||
+      webpage.description !== meta.description ||
+      webpage.url !== meta.canonical
+    ) {
+      throw new Error(`La ficha de ${output.id} no coincide con su WebPage.`)
+    }
+    if (organization.email !== owner.email || organization.description !== hero.support) {
+      throw new Error('La organización del JSON-LD no coincide con el titular público.')
+    }
+    if (JSON.stringify(ld).includes(owner.idDocument)) {
+      throw new Error('El JSON-LD no debe incluir el documento de identidad.')
+    }
+
+    if (output.id === 'home') {
+      const names = (node('ItemList')?.itemListElement ?? []).map((item) => item.item?.name)
+      const expected = services.map((service) => service.title)
+      if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+        throw new Error('El JSON-LD de la home no lista los servicios que se ven en la página.')
+      }
+    } else if (node('ItemList')) {
+      throw new Error(`La página ${output.id} no muestra los servicios: no deben ir en su JSON-LD.`)
+    }
 
     if (output.id === 'home') {
       if (!html.includes('id="hero-title"') || !html.includes(heroTitle)) {
