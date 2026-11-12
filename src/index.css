@@ -1187,6 +1187,13 @@ textarea {
   -webkit-tap-highlight-color: rgba(86, 193, 233, 0.28);
 }
 
+/* El formulario sin JavaScript está dentro de noscript. Con script el
+   navegador no lo interpreta, pero la caja sigue en la rejilla y dejaría
+   un hueco bajo el formulario de verdad. */
+.contact-panel noscript {
+  display: none;
+}
+
 .contact-form {
   display: grid;
   gap: 0.9rem;

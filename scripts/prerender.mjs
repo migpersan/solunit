@@ -146,6 +146,20 @@ try {
       if (html.includes(owner.idDocument)) {
         throw new Error('La home no debe incluir el documento de identidad. Está en el aviso legal.')
       }
+      // Chrome trata action="mailto:" del formulario visible como contenido
+      // mixto. El envío con JavaScript no usa ese action. Sin JavaScript
+      // sigue habiendo un formulario mailto, solo dentro de noscript.
+      const outsideNoscript = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, '')
+      if (outsideNoscript.includes('action="mailto:')) {
+        throw new Error('El formulario visible no debe usar action mailto.')
+      }
+      if (!outsideNoscript.includes('method="dialog"')) {
+        throw new Error('El formulario visible tiene que usar method dialog para no enviar datos al servidor.')
+      }
+      const noscript = html.match(/<noscript>[\s\S]*?<\/noscript>/g) ?? []
+      if (!noscript.some((block) => block.includes(`action="mailto:${owner.email}"`))) {
+        throw new Error('Sin JavaScript el formulario tiene que seguir abriendo el correo.')
+      }
       // Servicios, método, ejemplo y contacto tienen que estar en el HTML a plena tinta.
       // Ocultarlos hasta hacer scroll deja el foco y la búsqueda sobre texto invisible.
       if (html.includes('data-reveal') || html.includes('reveal-ready')) {
